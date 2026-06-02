@@ -52,6 +52,54 @@ body.hero-loaded .hero-floaters { opacity: 1; transform: none; transition-delay:
 }
 .netmap-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .netmap .nodes { position: absolute; inset: 0; }
+.map-orbit {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  perspective: 900px; transform-style: preserve-3d;
+}
+.orbit-ring {
+  position: absolute; left: 50%; top: 50%;
+  width: 62%; height: 32%; border-radius: 50%;
+  border: 1px solid oklch(0.78 0.10 244 / 0.26);
+  transform: translate(-50%, -50%) rotateX(64deg) rotateZ(-14deg);
+  box-shadow: 0 0 35px oklch(0.62 0.10 244 / 0.08);
+}
+.orbit-ring.r2 {
+  width: 78%; height: 40%; border-color: oklch(0.75 0.10 150 / 0.22);
+  animation: orbitRing 15s linear infinite reverse;
+}
+.orbit-ring.r1 { animation: orbitRing 18s linear infinite; }
+.orbit-card {
+  position: absolute; z-index: 4; display: inline-flex; align-items: center; justify-content: center;
+  min-width: 88px; height: 32px; padding: 0 12px; border-radius: 999px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: oklch(0.96 0.01 250);
+  background: oklch(0.12 0.03 250 / 0.58);
+  border: 1px solid oklch(0.75 0.10 244 / 0.32);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 14px 35px oklch(0.06 0.03 250 / 0.35);
+}
+.orbit-card::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; margin-right: 8px;
+  background: oklch(0.72 0.14 150); box-shadow: 0 0 12px oklch(0.72 0.14 150);
+}
+.orbit-card.oc1 { left: 12%; top: 28%; animation: orbitFloatA 7s var(--ease) infinite alternate; }
+.orbit-card.oc2 { right: 9%; top: 45%; animation: orbitFloatB 8s var(--ease) infinite alternate; }
+.orbit-card.oc3 { left: 30%; bottom: 20%; animation: orbitFloatC 7.5s var(--ease) infinite alternate; }
+@keyframes orbitRing {
+  to { transform: translate(-50%, -50%) rotateX(64deg) rotateZ(346deg); }
+}
+@keyframes orbitFloatA {
+  0% { transform: translate3d(0, 0, 30px); }
+  100% { transform: translate3d(26px, 12px, 30px); }
+}
+@keyframes orbitFloatB {
+  0% { transform: translate3d(0, 0, 38px); }
+  100% { transform: translate3d(-24px, -14px, 38px); }
+}
+@keyframes orbitFloatC {
+  0% { transform: translate3d(0, 0, 26px); }
+  100% { transform: translate3d(18px, -22px, 26px); }
+}
 .net-node {
   position: absolute; width: 11px; height: 11px; translate: -50% -50%; border-radius: 50%;
   background: oklch(0.75 0.12 244); box-shadow: 0 0 0 0 oklch(0.7 0.12 244 / 0.6);
@@ -74,12 +122,13 @@ body.hero-loaded .hero-floaters { opacity: 1; transform: none; transition-delay:
 }
 .net-node:hover + .net-label, .net-label.show { opacity: 1; translate: -50% -175%; }
 .netmap-legend {
-  position: absolute; left: 16px; bottom: 14px; z-index: 5; display: flex; align-items: center; gap: 9px;
+  position: absolute; right: 16px; bottom: 14px; z-index: 5; display: flex; align-items: center; gap: 9px;
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: oklch(0.9 0.02 250 / 0.85);
 }
 .netmap-legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; background: oklch(0.62 0.16 150); box-shadow: 0 0 10px oklch(0.62 0.16 150); animation: blink 1.8s infinite; }
 @keyframes blink { 50% { opacity: .35; } }
 .netmap .ph-badge { z-index: 5; }
+:root[data-motion="off"] .orbit-ring, :root[data-motion="off"] .orbit-card { animation: none; }
 
 /* ---------- Filterable brand portfolio ---------- */
 .brand-filter { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }

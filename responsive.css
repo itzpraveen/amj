@@ -128,8 +128,14 @@ body.menu-open { overflow: hidden; }
   .news-grid { gap: 24px; }
 
   /* coverage map */
+  .client-logos { grid-template-columns: 1fr; gap: 10px; }
+  .client-logo-card { min-height: 118px; }
+  .client-channels { gap: 7px; }
+  .client-channels span { font-size: 9.5px; padding: 7px 10px; }
   .netmap { aspect-ratio: 1 / 1; }
   .net-label { font-size: 9.5px; padding: 3px 7px; }
+  .orbit-card { display: none; }
+  .orbit-ring { width: 76%; height: 34%; }
 
   /* newsletter */
   .sub-form { flex-direction: column; }
