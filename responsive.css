@@ -83,7 +83,9 @@ body.menu-open { overflow: hidden; }
 /* ---- Phones ---- */
 @media (max-width: 640px) {
   :root { --gut: 20px; }
+  html, body { overflow-x: hidden; }
   body { font-size: 16px; }
+  section[id] { scroll-margin-top: 84px; }
   .sect { padding-block: clamp(56px, 16vw, 84px); }
 
   /* hero */
@@ -112,9 +114,47 @@ body.menu-open { overflow: hidden; }
   .ops-meta .h3 { font-size: 22px; }
 
   /* brands */
+  .brand-intro { align-items: flex-start; flex-direction: column; }
   .brand-filter { gap: 8px; }
   .chip { padding: 14px 17px; font-size: 11px; }
+  .brand-filter {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .brand-filter::-webkit-scrollbar { display: none; }
   .brand-cell { aspect-ratio: 3/2; }
+  .brand-preview {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 4px 20px 10px;
+    margin-inline: -20px;
+    scrollbar-width: none;
+  }
+  .brand-preview::-webkit-scrollbar { display: none; }
+  .brand-preview .brand-cell {
+    flex: 0 0 min(74vw, 230px);
+    min-height: 154px;
+    scroll-snap-align: start;
+  }
+  .brand-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .brand-directory .brand-cell {
+    min-height: 132px;
+  }
+  .brand-proof {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand-proof div:nth-child(2) { border-right: 0; }
+  .brand-proof div:nth-child(-n+2) { border-bottom: 1px solid var(--line-soft); }
+  .brand-cta-row { align-items: flex-start; flex-direction: column; }
+  .brand-note { align-items: flex-start; }
 
   /* restaurants: stack cleanly */
   .resto-row { grid-template-columns: 1fr; gap: 6px; padding: 24px 22px; }
