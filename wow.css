@@ -1,0 +1,95 @@
+/* ============================================================
+   AMJ — "wow" layer: cursor, network map, brand filter, intro
+   ============================================================ */
+
+/* ---------- Custom magnetic cursor ---------- */
+.cursor-dot, .cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
+  border-radius: 50%; mix-blend-mode: difference; will-change: transform;
+}
+.cursor-dot { width: 7px; height: 7px; background: #fff; margin: -3.5px 0 0 -3.5px; }
+.cursor-ring {
+  width: 40px; height: 40px; border: 1.5px solid #fff; margin: -20px 0 0 -20px;
+  transition: width .3s var(--ease), height .3s var(--ease), margin .3s var(--ease), background .3s var(--ease), opacity .3s var(--ease);
+  display: grid; place-items: center;
+}
+.cursor-ring .clabel {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; color: #fff;
+  text-transform: uppercase; opacity: 0; transition: opacity .3s; mix-blend-mode: difference;
+}
+body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor [data-tilt], body.has-cursor .nav-cta, body.has-cursor input { cursor: none; }
+.cursor-ring.hover { width: 66px; height: 66px; margin: -33px 0 0 -33px; background: rgba(255,255,255,0.10); }
+.cursor-ring.label { width: 92px; height: 92px; margin: -46px 0 0 -46px; background: rgba(255,255,255,0.14); }
+.cursor-ring.label .clabel { opacity: 1; }
+.cursor-hidden { opacity: 0 !important; }
+@media (hover: none), (pointer: coarse) { .cursor-dot, .cursor-ring { display: none !important; } }
+
+/* ---------- Kinetic hero intro ---------- */
+.display.reveal-lines .ln { display: block; overflow: hidden; }
+.display.reveal-lines .ln > span { display: block; transform: translateY(105%); transition: transform 1s var(--ease); }
+body.hero-loaded .display.reveal-lines .ln > span { transform: translateY(0); }
+.display.reveal-lines .ln:nth-child(2) > span { transition-delay: .12s; }
+.display.reveal-lines .ln:nth-child(3) > span { transition-delay: .24s; }
+.hero .est, .hero .scroll-cue, .hero .hero-meta, .hero-floaters {
+  opacity: 0; transform: translateY(16px); transition: opacity 1s var(--ease), transform 1s var(--ease);
+}
+body.hero-loaded .hero .est { opacity: 1; transform: none; transition-delay: .15s; }
+body.hero-loaded .hero .hero-meta { opacity: 1; transform: none; transition-delay: .5s; }
+body.hero-loaded .hero .scroll-cue { opacity: 1; transform: none; transition-delay: .7s; }
+body.hero-loaded .hero-floaters { opacity: 1; transform: none; transition-delay: .4s; }
+:root[data-motion="off"] .display.reveal-lines .ln > span { transform: none !important; }
+:root[data-motion="off"] .hero .est, :root[data-motion="off"] .hero .scroll-cue,
+:root[data-motion="off"] .hero .hero-meta, :root[data-motion="off"] .hero-floaters { opacity: 1 !important; transform: none !important; }
+
+/* ---------- Live distribution network map ---------- */
+.netmap {
+  position: relative; aspect-ratio: 4 / 3; border-radius: 14px; overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 70% 30%, oklch(0.28 0.06 244 / 0.9), transparent 60%),
+    linear-gradient(160deg, oklch(0.20 0.04 250), oklch(0.13 0.03 250));
+  border: 1px solid oklch(0.45 0.06 244 / 0.4);
+  box-shadow: inset 0 0 80px oklch(0.10 0.04 250 / 0.6), 0 40px 100px oklch(0.20 0.05 250 / 0.25);
+}
+.netmap-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.netmap .nodes { position: absolute; inset: 0; }
+.net-node {
+  position: absolute; width: 11px; height: 11px; translate: -50% -50%; border-radius: 50%;
+  background: oklch(0.75 0.12 244); box-shadow: 0 0 0 0 oklch(0.7 0.12 244 / 0.6);
+  cursor: pointer; transition: transform .3s var(--ease), background .3s;
+}
+.net-node::after {
+  content: ""; position: absolute; inset: -6px; border-radius: 50%;
+  border: 1px solid oklch(0.7 0.12 244 / 0.5); animation: nodepulse 2.6s ease-out infinite;
+}
+.net-node.hub { width: 17px; height: 17px; background: oklch(0.85 0.13 244); }
+.net-node.hub::after { inset: -10px; border-color: oklch(0.8 0.13 244 / 0.6); }
+@keyframes nodepulse { 0% { transform: scale(0.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
+.net-node:hover { transform: translate(-50%, -50%) scale(1.5); background: #fff; }
+.net-label {
+  position: absolute; translate: -50% -150%; white-space: nowrap;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em; color: oklch(0.95 0.02 250);
+  background: oklch(0.12 0.03 250 / 0.85); border: 1px solid oklch(0.5 0.06 244 / 0.5);
+  padding: 4px 9px; border-radius: 6px; opacity: 0; transform-origin: bottom;
+  transition: opacity .25s var(--ease), translate .25s var(--ease); pointer-events: none; backdrop-filter: blur(4px);
+}
+.net-node:hover + .net-label, .net-label.show { opacity: 1; translate: -50% -175%; }
+.netmap-legend {
+  position: absolute; left: 16px; bottom: 14px; z-index: 5; display: flex; align-items: center; gap: 9px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: oklch(0.9 0.02 250 / 0.85);
+}
+.netmap-legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; background: oklch(0.62 0.16 150); box-shadow: 0 0 10px oklch(0.62 0.16 150); animation: blink 1.8s infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+.netmap .ph-badge { z-index: 5; }
+
+/* ---------- Filterable brand portfolio ---------- */
+.brand-filter { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+.chip {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 9px 16px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2);
+  transition: color .35s var(--ease), border-color .35s var(--ease), background .35s var(--ease);
+}
+.chip:hover { color: var(--ink); border-color: var(--ink-3); }
+.chip.active { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.brand-cell { transition: opacity .5s var(--ease), transform .5s var(--ease), background .5s var(--ease); }
+.brand-cell.filtered { opacity: 0; transform: scale(0.92); pointer-events: none; }
+.brand-cell.gone { display: none; }

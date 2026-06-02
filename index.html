@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-motion="on">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Al Majid Jawad — Distributing the world's finest, across Qatar</title>
+<meta name="ext-resource-dependency" content="assets/resto-dq.jpg" data-resource-id="restoDq" />
+<meta name="ext-resource-dependency" content="assets/resto-outback.jpg" data-resource-id="restoOutback" />
+<meta name="ext-resource-dependency" content="assets/resto-aussie.jpg" data-resource-id="restoAussie" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="sections.css" />
+<link rel="stylesheet" href="fx.css" />
+<link rel="stylesheet" href="wow.css" />
+<link rel="stylesheet" href="responsive.css" />
+</head>
+<body>
+
+<template id="__bundler_thumbnail" data-bg-color="#0f2236">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0f2236"/>
+    <g fill="#eef4f9">
+      <path d="M380 300 L470 300 L530 500 L440 500 Z"/>
+      <path d="M500 300 L590 300 L650 500 L560 500 Z"/>
+      <path d="M690 300 L760 300 L760 460 a55 55 0 0 1 -55 55 L640 515 Z"/>
+    </g>
+    <rect x="380" y="540" width="230" height="34" fill="#8a93ac"/>
+  </svg>
+</template>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Al Majid Jawad home">
+      <img class="logo logo-light" src="assets/amj-logo.png" alt="Al Majid Jawad W.L.L" />
+      <img class="logo logo-dark" src="assets/amj-logo-white.png" alt="Al Majid Jawad W.L.L" />
+    </a>
+    <nav class="nav-links">
+      <a href="history.html">History</a>
+      <a href="infrastructure.html">Infrastructure</a>
+      <a href="brands.html">Brands</a>
+      <a href="restaurants.html">Restaurants</a>
+      <a href="news.html">News</a>
+    </nav>
+    <a class="nav-cta" href="contact.html" data-magnetic="0.35"><span class="pulse"></span>Ask AMJ</a>
+    <button class="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== MOBILE MENU ===================== -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <nav class="mm-links">
+    <a href="history.html"><span class="mm-no">01</span>History</a>
+    <a href="infrastructure.html"><span class="mm-no">02</span>Infrastructure</a>
+    <a href="brands.html"><span class="mm-no">03</span>Brands</a>
+    <a href="restaurants.html"><span class="mm-no">04</span>Restaurants</a>
+    <a href="news.html"><span class="mm-no">05</span>News</a>
+  </nav>
+  <a class="mm-cta" href="contact.html"><span class="pulse"></span>Ask AMJ</a>
+  <div class="mm-foot">info@amjqatar.me · Doha, State of Qatar</div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="top" data-screen-label="Hero">
+  <div class="hero-bg">
+    <div class="hero-bg-cursor"><img class="hero-img kenburns" src="assets/hero-poster.jpg" alt="" /></div>
+  </div>
+  <div class="hero-grid"></div>
+  <canvas class="hero-particles"></canvas>
+  <div class="hero-floaters" aria-hidden="true">
+    <span class="floater f1" data-depth="0.9" data-rot="0"></span>
+    <span class="floater f2" data-depth="0.5" data-rot="18"></span>
+    <span class="floater f3" data-depth="1.25" data-rot="0"></span>
+  </div>
+  <div class="hero-inner wrap">
+    <div class="hero-top">
+      <div>
+        <span class="est">Est. 1997 · Doha, State of Qatar</span>
+        <h1 class="display reveal-lines">
+          <span class="ln"><span>The taste of</span></span>
+          <span class="ln"><span>Qatar, delivered</span></span>
+          <span class="ln"><span>for <i class="num accent-text">29</i> <em class="it">years.</em></span></span>
+        </h1>
+      </div>
+      <div class="scroll-cue"><span class="bar"></span>Scroll to explore</div>
+    </div>
+
+    <div class="hero-meta" style="margin-top: clamp(32px,4vw,54px);">
+      <p class="lede">Al Majid Jawad is Qatar's trusted house of world-class food &amp; beverage brands — from the warehouse to the table, and into the country's most-loved restaurants.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="history.html" data-magnetic="0.3">Our story <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="brands.html" data-magnetic="0.3">View the portfolio <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- heritage marquee -->
+<div class="strip">
+  <div class="track">
+    <span class="strip-item">World-Class Products <span class="star">✦</span></span>
+    <span class="strip-item">HACCP-Certified Facilities <span class="star">✦</span></span>
+    <span class="strip-item">Nationwide Cold Chain <span class="star">✦</span></span>
+    <span class="strip-item">Dairy Queen <span class="star">✦</span></span>
+    <span class="strip-item">Outback Steakhouse <span class="star">✦</span></span>
+    <span class="strip-item">Aussie Grill <span class="star">✦</span></span>
+    <span class="strip-item">Anchor · Tilda · Monin <span class="star">✦</span></span>
+  </div>
+</div>
+
+<!-- ===================== ABOUT / HERITAGE ===================== -->
+<section class="sect" id="heritage" data-screen-label="Heritage">
+  <div class="wrap about-grid">
+    <div class="sect-head reveal">
+      <span class="kicker">About AMJ</span>
+      <h2 class="h2">Twenty-nine years<br>of <em class="it">service</em>.</h2>
+      <p class="lede" style="margin-top:8px;">A comprehensive portfolio built to satisfy every food and beverage requirement of Qatar's most demanding market — backed by infrastructure, logistics and people who never compromise.</p>
+      <a class="tlink" href="infrastructure.html" style="margin-top:14px;">Explore our capabilities <span class="arr">→</span></a>
+    </div>
+
+    <div class="pillars reveal" data-d="1">
+      <div class="pillar"><span class="pbar"></span>
+        <span class="pn">01</span>
+        <h4>World-Class Products</h4>
+        <p>A comprehensive portfolio catering to every food &amp; beverage requirement of Qatar's demanding market.</p>
+      </div>
+      <div class="pillar"><span class="pbar"></span>
+        <span class="pn">02</span>
+        <h4>State-of-the-Art Facilities</h4>
+        <p>Modern warehousing that keeps pace with demand and protects food quality under our HACCP policy.</p>
+      </div>
+      <div class="pillar"><span class="pbar"></span>
+        <span class="pn">03</span>
+        <h4>Outstanding Service</h4>
+        <p>We take pride in understanding each customer's requirement and delivering every order, on time.</p>
+      </div>
+      <div class="pillar"><span class="pbar"></span>
+        <span class="pn">04</span>
+        <h4>Extensive Logistics</h4>
+        <p>A large fleet of specialised, temperature-controlled vehicles ensures prompt delivery, every time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== INFRASTRUCTURE / COUNTERS ===================== -->
+<section class="sect infra" id="infrastructure" data-screen-label="Infrastructure">
+  <div class="wrap">
+    <div class="sect-head reveal" style="max-width:640px;">
+      <span class="kicker">Infrastructure</span>
+      <h2 class="h2">Our highlights, by<br>the <em class="it">numbers</em>.</h2>
+    </div>
+    <div class="stats">
+      <div class="stat reveal">
+        <div class="val"><span data-count="14" data-dec="0">0</span><span class="u">K</span></div>
+        <div class="lab">Ambient storage · pallets</div>
+      </div>
+      <div class="stat reveal" data-d="1">
+        <div class="val"><span data-count="6" data-dec="0">0</span><span class="u">K</span></div>
+        <div class="lab">Chilled storage · pallets</div>
+      </div>
+      <div class="stat reveal" data-d="2">
+        <div class="val"><span data-count="11" data-dec="0">0</span><span class="u">K</span></div>
+        <div class="lab">Frozen storage · pallets</div>
+      </div>
+      <div class="stat reveal" data-d="3">
+        <div class="val"><span data-count="3" data-dec="0">0</span><span class="u">K+</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SHOWREEL ===================== -->
+<section class="sect showreel-sect" data-screen-label="Showreel">
+  <div class="wrap">
+    <div class="sect-head reveal" style="max-width:680px;margin-bottom:48px;">
+      <span class="kicker">Inside AMJ</span>
+      <h2 class="h2">A look inside<br>our <em class="it">operations</em>.</h2>
+    </div>
+    <div class="video-card reveal" data-d="1" data-tilt="4">
+      <img class="media kenburns" src="assets/hero-poster.jpg" alt="AMJ operations showreel" />
+      <div class="video-scrim"></div>
+      <div class="glare"></div>
+      <div class="video-meta">
+        <span class="kicker" style="color:oklch(0.88 0.04 244)">Brand Film · 2:14</span>
+        <h3 class="h3" style="color:oklch(0.99 0.005 250);max-width:20ch;">From the port to the plate — the AMJ supply chain.</h3>
+      </div>
+      <button class="video-play" aria-label="Play showreel"><span class="tri"></span></button>
+      <span class="ph-badge">Video placeholder · drop in .mp4</span>
+      <span class="video-bar"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BRANDS ===================== -->
+<section class="sect" id="brands" data-screen-label="Brands">
+  <div class="wrap">
+    <div class="sect-head reveal" style="max-width:680px;">
+      <span class="kicker">Products</span>
+      <h2 class="h2">Our FMCG &amp;<br>retail <em class="it">brands</em>.</h2>
+      <p class="lede" style="margin-top:8px;">An ever-increasing portfolio of recognised names. We work hard to meet the varying needs of clients across every sector of the economy.</p>
+    </div>
+	    <div class="brand-filter reveal" data-d="1">
+	      <button class="chip active" data-cat="all">All</button>
+	      <button class="chip" data-cat="dry">Dry &amp; Frozen</button>
+	      <button class="chip" data-cat="beverages">Beverages</button>
+	      <button class="chip" data-cat="chocolates">Chocolate &amp; Snacks</button>
+	    </div>
+	    <div class="brands-grid reveal" data-d="1">
+	      <div class="brand-cell has-logo" data-cat="dry frozen" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/olalogonew.png" alt="Ola logo" loading="lazy" /><span class="name">Ola</span><span class="cat">Dry &amp; Frozen</span></div>
+	      <div class="brand-cell has-logo" data-cat="dry frozen" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/anchorlogo.png" alt="Anchor logo" loading="lazy" /><span class="name">Anchor</span><span class="cat">Dry &amp; Frozen</span></div>
+	      <div class="brand-cell has-logo" data-cat="dry frozen" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/logotilda.png" alt="Tilda logo" loading="lazy" /><span class="name">Tilda</span><span class="cat">Dry &amp; Frozen</span></div>
+	      <div class="brand-cell has-logo" data-cat="beverages" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/moninlogo.png" alt="Monin logo" loading="lazy" /><span class="name">Monin</span><span class="cat">Beverages</span></div>
+	      <div class="brand-cell has-logo" data-cat="chocolates snacks" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/Group-99-1.png" alt="Tyrrells logo" loading="lazy" /><span class="name">Tyrrells</span><span class="cat">Chocolate &amp; Snacks</span></div>
+	      <div class="brand-cell has-logo" data-cat="dry frozen" data-tilt="6"><div class="glare"></div><img class="brand-logo" src="assets/brand-logos/mccain_FoodServiceSolutions_print.png" alt="McCain Foodservice Solutions logo" loading="lazy" /><span class="name">McCain Foodservice Solutions</span><span class="cat">Dry &amp; Frozen</span></div>
+	    </div>
+    <div class="reveal" data-d="2" style="margin-top:36px;display:flex;gap:14px;flex-wrap:wrap;">
+      <a class="btn btn-ghost" href="#contact">Condiments · Beverages · Frozen &amp; Fresh <span class="arr">→</span></a>
+      <a class="btn btn-ghost" href="#contact">Chocolates · Fruits &amp; Vegetables <span class="arr">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESTAURANTS ===================== -->
+<section class="sect" id="restaurants" data-screen-label="Restaurants" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sect-head reveal" style="max-width:680px;">
+      <span class="kicker">Restaurants</span>
+      <h2 class="h2">World-class dining,<br>brought <em class="it">home</em>.</h2>
+    </div>
+    <div class="resto reveal" data-d="1">
+      <div class="resto-row" data-img="assets/resto-dq.jpg" data-img-id="restoDq">
+        <span class="rno">01</span>
+        <div>
+          <div class="rname">Dairy Queen</div>
+          <div class="rtag">29 years in Qatar · 6,400+ worldwide</div>
+        </div>
+        <p class="rdesc">The beloved home of Blizzards and ice-cream cakes — serving Qatar's appetite for joyful dining since AMJ first opened its doors.</p>
+        <a class="tlink rcta" href="https://www.dq-qatar.qa" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+      </div>
+      <div class="resto-row" data-img="assets/resto-outback.jpg" data-img-id="restoOutback">
+        <span class="rno">02</span>
+        <div>
+          <div class="rname">Outback Steakhouse</div>
+          <div class="rtag">Since 2013 · 6 outlets · 1,200+ worldwide</div>
+        </div>
+        <p class="rdesc">Well-seasoned, grilled-to-order steaks and a generous Australian-inspired menu — newest at Porto Arabia, The Pearl.</p>
+        <a class="tlink rcta" href="https://www.outback.qa" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+      </div>
+      <div class="resto-row" data-img="assets/resto-aussie.jpg" data-img-id="restoAussie">
+        <span class="rno">03</span>
+        <div>
+          <div class="rname">Aussie Grill</div>
+          <div class="rtag">Fast-casual · Burgers · Steaks · Seafood</div>
+        </div>
+        <p class="rdesc">A fast-casual concept inspired by the bold flavours of Outback — burgers, crispy chicken, steaks and seafood, done right.</p>
+        <a class="tlink rcta" href="https://www.aussiegrill.qa" target="_blank" rel="noopener">Learn more <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="resto-thumb"><img class="media" src="assets/resto-dq.jpg" alt="" /></div>
+
+<!-- ===================== NEWS ===================== -->
+<section class="sect infra" id="news" data-screen-label="News">
+  <div class="wrap">
+    <div class="sect-head reveal" style="flex-direction:row;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;">
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <span class="kicker">News &amp; Events</span>
+        <h2 class="h2">Latest updates<br>from <em class="it">AMJ</em>.</h2>
+      </div>
+      <a class="btn btn-ghost" href="news.html">See all news <span class="arr">→</span></a>
+    </div>
+    <div class="news-grid">
+      <article class="news-card reveal" data-d="1" data-tilt="5">
+        <div class="nimg media-frame"><div class="glare"></div><img class="media" src="assets/news-1.jpg" alt="National Sports Day 2026" /><span class="ph-badge">National Sports Day 2026</span></div>
+        <div class="nmeta"><span>Community</span><span class="dt">Feb 2026</span></div>
+        <h4>Al Majid Jawad reinforces commitment to wellness on National Sports Day 2026</h4>
+        <p>Proud to participate in Qatar's 15th National Sports Day, reaffirming our commitment to promoting health across our teams and communities.</p>
+      </article>
+      <article class="news-card reveal" data-d="2" data-tilt="5">
+        <div class="nimg media-frame"><div class="glare"></div><img class="media" src="assets/news-2.jpg" alt="Outback Porto Arabia opening" /><span class="ph-badge">Outback · Porto Arabia</span></div>
+        <div class="nmeta"><span>Restaurants</span><span class="dt">Jul 2025</span></div>
+        <h4>Outback Steakhouse opens sixth outlet in Qatar at Porto Arabia, The Pearl</h4>
+        <p>The globally renowned Australian-inspired casual dining restaurant continues to delight food lovers in Qatar with its sixth location.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COVERAGE / CLIENTS ===================== -->
+<section class="sect cover" id="coverage" data-screen-label="Coverage">
+  <div class="wrap cover-grid">
+    <div class="reveal">
+      <span class="kicker">Our Clients</span>
+      <h2 class="h2" style="margin-top:20px;">Reliability you<br>can <em class="it">depend on</em>.</h2>
+      <p class="lede" style="margin-top:18px;">Whatever your timetable, AMJ gets goods to you on time, every time — covering every corner of the country through a reliable, temperature-controlled distribution network.</p>
+      <div class="client-logos">
+        <div class="cl">Hypermarkets</div>
+        <div class="cl">HORECA</div>
+        <div class="cl">Wholesale</div>
+        <div class="cl">Catering</div>
+        <div class="cl">Retail</div>
+        <div class="cl">Institutions</div>
+      </div>
+    </div>
+    <div class="reveal" data-d="1">
+      <div class="netmap" data-tilt="4">
+        <canvas class="netmap-canvas"></canvas>
+        <div class="nodes"></div>
+        <div class="netmap-legend"><span class="lg-dot"></span> Live distribution · on-time, every time</div>
+        <span class="ph-badge">Coverage network · Qatar</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== NEWSLETTER ===================== -->
+<section class="sect news-cta" id="contact" data-screen-label="Contact">
+  <span class="ring" style="width:520px;height:520px;"></span>
+  <span class="ring" style="width:820px;height:820px;"></span>
+  <span class="ring" style="width:1140px;height:1140px;"></span>
+  <div class="wrap" style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+    <span class="kicker reveal" style="justify-content:center;">Never miss an update</span>
+    <h2 class="display reveal" data-d="1" style="margin-top:24px;font-size:clamp(40px,7vw,104px);">Let's stay<br><em class="it">together</em>.</h2>
+    <form class="sub-form reveal" data-d="2" style="margin-inline:auto;">
+      <input type="email" placeholder="your@email.com" aria-label="Email address" />
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+    <div class="sub-note reveal" data-d="3"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;"></span> News, openings and brand launches — about once a month.</div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="fbrand">
+        <span class="mark">AM<b>J</b></span>
+        <p style="color:var(--ink-3);font-size:15px;margin-top:18px;max-width:34ch;">Al Majid Jawad W.L.L — distributing the world's finest food &amp; beverage brands across the State of Qatar since 1997.</p>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="history.html">History</a></li>
+          <li><a href="infrastructure.html">Infrastructure</a></li>
+          <li><a href="brands.html">Brands</a></li>
+          <li><a href="restaurants.html">Restaurants</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="contact.html">Careers</a></li>
+          <li><a href="news.html">News &amp; Events</a></li>
+          <li><a href="locate.html">Locate us</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:info@amjqatar.me">info@amjqatar.me</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="contact.html">Ask AMJ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© <span id="year">2026</span> Al Majid Jawad W.L.L. All rights reserved.</p>
+      <div class="foot-social">
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="mailto:info@amjqatar.me" aria-label="Email">@</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-mark">AM<b>J</b></div>
+</footer>
+
+<div id="tweaks-root"></div>
+
+<script src="app.js"></script>
+<script src="fx.js"></script>
+<script src="wow.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks.jsx"></script>
+</body>
+</html>

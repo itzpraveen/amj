@@ -1,0 +1,133 @@
+/* ============================================================
+   AMJ — FX: cursor 3D depth, tilt, hero particles, showreel
+   ============================================================ */
+(function () {
+  const root = document.documentElement;
+  const motionOn = () => root.getAttribute('data-motion') !== 'off';
+
+  /* ---- Cursor → smoothed depth for hero layers ---- */
+  const heroCursor = document.querySelector('.hero-bg-cursor');
+  const floaters = [...document.querySelectorAll('.floater')];
+  let tx = 0, ty = 0, cx = 0, cy = 0;
+  window.addEventListener('pointermove', (e) => {
+    tx = (e.clientX / window.innerWidth - 0.5) * 2;
+    ty = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  function depthLoop() {
+    if (motionOn()) {
+      cx += (tx - cx) * 0.06;
+      cy += (ty - cy) * 0.06;
+    }
+    if (heroCursor) heroCursor.style.transform = `translate3d(${cx * -16}px, ${cy * -16}px, 0)`;
+    floaters.forEach((f) => {
+      const d = parseFloat(f.dataset.depth || 0.6);
+      const rot = parseFloat(f.dataset.rot || 0);
+      f.style.transform = `translate3d(${cx * -46 * d}px, ${cy * -46 * d}px, 0) rotate(${rot}deg)`;
+    });
+    requestAnimationFrame(depthLoop);
+  }
+  depthLoop();
+
+  /* ---- 3D tilt-on-cursor for [data-tilt] ---- */
+  document.querySelectorAll('[data-tilt]').forEach((el) => {
+    const max = parseFloat(el.dataset.tilt) || 8;
+    el.addEventListener('pointermove', (e) => {
+      if (!motionOn()) return;
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--ry', (px * max).toFixed(2) + 'deg');
+      el.style.setProperty('--rx', (-py * max).toFixed(2) + 'deg');
+      el.style.setProperty('--gx', (px * 90 + 50).toFixed(1) + '%');
+      el.style.setProperty('--gy', (py * 90 + 50).toFixed(1) + '%');
+      el.classList.add('tilting');
+    });
+    el.addEventListener('pointerleave', () => {
+      el.style.setProperty('--ry', '0deg');
+      el.style.setProperty('--rx', '0deg');
+      el.classList.remove('tilting');
+    });
+  });
+
+  /* ---- Hero particles (floating brand shards = video-like motion) ---- */
+  const cvs = document.querySelector('.hero-particles');
+  const allowParticles = window.innerWidth > 760 && window.matchMedia('(hover: hover)').matches;
+  if (cvs && allowParticles) {
+    const ctx = cvs.getContext('2d');
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let W, H, parts;
+    function init() {
+      const n = Math.max(10, Math.round((W * H) / (150000 * dpr)));
+      parts = [];
+      for (let i = 0; i < n; i++) {
+        parts.push({
+          x: Math.random() * W, y: Math.random() * H,
+          s: (Math.random() * 12 + 6) * dpr,
+          vx: (Math.random() - 0.5) * 0.12 * dpr,
+          vy: (-Math.random() * 0.18 - 0.04) * dpr,
+          a: Math.random() * 0.35 + 0.08,
+          r: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.004
+        });
+      }
+    }
+    function resize() {
+      W = cvs.width = Math.max(1, cvs.offsetWidth * dpr);
+      H = cvs.height = Math.max(1, cvs.offsetHeight * dpr);
+      init();
+    }
+    function frame() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of parts) {
+        if (motionOn()) { p.x += p.vx + cx * 0.35 * dpr; p.y += p.vy; p.r += p.vr; }
+        if (p.y < -30) { p.y = H + 30; p.x = Math.random() * W; }
+        if (p.x < -30) p.x = W + 30; if (p.x > W + 30) p.x = -30;
+        ctx.save();
+        ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a;
+        ctx.fillStyle = 'rgba(150,200,235,0.95)';
+        ctx.beginPath();
+        ctx.moveTo(0, -p.s); ctx.lineTo(p.s * 0.9, p.s * 0.7); ctx.lineTo(-p.s * 0.9, p.s * 0.7);
+        ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', resize);
+    resize(); frame();
+  }
+
+  /* ---- Restaurant hover thumbnail: swap image per row ---- */
+  const thumb = document.querySelector('.resto-thumb');
+  if (thumb) {
+    const img = thumb.querySelector('img');
+    document.querySelectorAll('.resto-row').forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        if (!motionOn()) return;
+        const res = window.__resources || {};
+        const src = (row.dataset.imgId && res[row.dataset.imgId]) || row.dataset.img;
+        if (src) img.src = src;
+        thumb.classList.add('show');
+      });
+      row.addEventListener('mouseleave', () => thumb.classList.remove('show'));
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!thumb.classList.contains('show')) return;
+      thumb.style.left = (e.clientX + 26) + 'px';
+      thumb.style.top = (e.clientY - 110) + 'px';
+    });
+  }
+
+  /* ---- Showreel play (simulated playback) ---- */
+  document.querySelectorAll('.video-card').forEach((card) => {
+    const play = card.querySelector('.video-play');
+    const toggle = () => {
+      card.classList.toggle('playing');
+      if (!card.classList.contains('playing')) {
+        const bar = card.querySelector('.video-bar');
+        if (bar) { bar.style.transition = 'none'; bar.style.width = '0'; requestAnimationFrame(() => bar.style.transition = ''); }
+      }
+    };
+    card.addEventListener('click', toggle);
+    if (play) play.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+  });
+})();
