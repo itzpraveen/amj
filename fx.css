@@ -97,6 +97,7 @@
   animation: laneFlow 2.6s linear infinite;
 }
 .hero-flow i:nth-of-type(2)::after { animation-delay: 0.5s; }
+.hero-flow i:nth-of-type(3)::after { animation-delay: 1s; }
 @keyframes laneFlow {
   0% { transform: translateX(-110%); }
   100% { transform: translateX(110%); }
@@ -208,6 +209,6 @@
   .ops-reel .ph-badge { display: none; }
   .floater.f3 { display: none; }
   .hero-3d { opacity: 0.42; }
-  .hero-flow { gap: 9px; font-size: 10px; letter-spacing: 0.08em; }
-  .hero-flow i { width: 30px; }
+  .hero-flow { gap: 8px; font-size: 9.5px; letter-spacing: 0.06em; max-width: 330px; }
+  .hero-flow i { width: 24px; }
 }
