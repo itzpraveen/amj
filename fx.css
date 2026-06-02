@@ -136,7 +136,9 @@
 .news-card:hover .media { transform: scale(1.06); }
 
 /* ---------- REAL MEDIA OPERATIONS REEL ---------- */
+.home-infra { padding-bottom: clamp(56px, 7vw, 98px); }
 .showreel-sect { padding-top: 0; }
+.showreel-sect .sect-head { margin-bottom: clamp(28px, 3vw, 38px); }
 .ops-reel {
   position: relative; border-radius: 8px; overflow: hidden;
   aspect-ratio: 21 / 9; border: 0;
