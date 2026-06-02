@@ -13,7 +13,7 @@
   backdrop-filter: blur(4px); border: 1px solid oklch(1 0 0 / 0.12);
 }
 
-/* slow cinematic drift = "video" feel */
+/* slow cinematic drift for image-led motion */
 .kenburns { animation: kenburns 26s var(--ease) infinite alternate; }
 @keyframes kenburns {
   0%   { transform: scale(1.06) translate(0, 0); }
@@ -137,8 +137,8 @@
 /* ---------- REAL MEDIA OPERATIONS REEL ---------- */
 .showreel-sect { padding-top: 0; }
 .ops-reel {
-  position: relative; border-radius: 16px; overflow: hidden;
-  aspect-ratio: 21 / 9; border: 1px solid var(--line);
+  position: relative; border-radius: 8px; overflow: hidden;
+  aspect-ratio: 21 / 9; border: 0;
   box-shadow: 0 40px 110px oklch(0.20 0.05 250 / 0.22);
 }
 .ops-frame {
@@ -155,7 +155,7 @@
 }
 .ops-reel::before {
   content: ""; position: absolute; z-index: 3; inset: 18px;
-  border: 1px solid oklch(1 0 0 / 0.16); border-radius: 12px;
+  border-block: 1px solid oklch(1 0 0 / 0.16);
   pointer-events: none;
 }
 .ops-reel::after {
@@ -174,19 +174,21 @@
 .ops-meta p { color: oklch(0.92 0.012 250 / 0.86); font-size: 15px; line-height: 1.55; max-width: 46ch; }
 .ops-steps {
   position: absolute; left: clamp(24px, 4vw, 56px); right: clamp(24px, 4vw, 56px); bottom: clamp(24px, 3.4vw, 42px); z-index: 4;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+  padding-top: 12px; border-top: 1px solid oklch(1 0 0 / 0.22);
 }
 .ops-steps button {
-  position: relative; overflow: hidden; text-align: left; border-radius: 8px;
-  border: 1px solid oklch(1 0 0 / 0.22); background: oklch(0.99 0.005 250 / 0.12);
-  color: oklch(0.96 0.006 250); padding: 13px 14px 15px; backdrop-filter: blur(10px);
-  transition: background 0.35s var(--ease), border-color 0.35s var(--ease), transform 0.35s var(--ease);
+  position: relative; overflow: hidden; text-align: left;
+  border: 0; background: transparent;
+  color: oklch(0.96 0.006 250); padding: 0 0 12px;
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
 }
 .ops-steps button::after {
   content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 0;
   background: var(--accent); opacity: 0.95;
 }
-.ops-steps button.active { background: oklch(0.99 0.005 250 / 0.2); border-color: oklch(1 0 0 / 0.38); }
+.ops-steps button { opacity: 0.66; }
+.ops-steps button.active { opacity: 1; }
 .ops-steps button.active::after { animation: reelProgress 4.8s linear both; }
 .ops-steps button:hover { transform: translateY(-2px); }
 .ops-steps b {

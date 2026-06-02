@@ -160,10 +160,14 @@
 }
 
 /* ---------- BRANDS ---------- */
-.brands-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-top: 56px; }
+.brands-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 24px); margin-top: 56px;
+}
 .brand-cell {
-  background: var(--bg); aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+  background: transparent; aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
+  border-block: 1px solid var(--line-soft);
 }
 .brand-cell.has-logo {
   flex-direction: column;
@@ -212,7 +216,7 @@
   opacity: 0; transform: translateY(10px); transition: all 0.5s var(--ease); z-index: 2;
 }
 .brand-cell::before {
-  content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 120%, oklch(0.585 0.108 244 / 0.20), transparent 70%);
+  content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 120%, oklch(0.585 0.108 244 / 0.13), transparent 70%);
   opacity: 0; transition: opacity 0.5s var(--ease);
 }
 .brand-cell:hover::before { opacity: 1; }
@@ -263,23 +267,20 @@
   margin-top: 34px; perspective: 1100px;
 }
 .client-logo-card {
-  position: relative; min-height: 132px; border-radius: 10px; overflow: hidden;
+  position: relative; min-height: 124px; overflow: visible;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-  background: linear-gradient(180deg, var(--bg), var(--bg-2));
-  border: 1px solid var(--line-soft);
-  box-shadow: 0 18px 50px oklch(0.20 0.04 250 / 0.08);
+  background: transparent;
   animation: clientFloat 6s var(--ease) infinite alternate;
   animation-delay: calc(var(--i, 0) * -1.4s);
 }
 .client-logo-card::before {
-  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background:
-    linear-gradient(115deg, transparent 0 34%, oklch(1 0 0 / 0.36) 45%, transparent 58%),
-    radial-gradient(circle at 50% -20%, oklch(0.80 0.08 244 / 0.18), transparent 50%);
-  opacity: 0; transform: translateX(-42%);
+  content: ""; position: absolute; left: 20%; right: 20%; bottom: 24px; z-index: 1;
+  height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, oklch(0.55 0.08 244 / 0.36), transparent);
+  opacity: 0.6; transform: scaleX(0.7);
   transition: opacity 0.35s var(--ease), transform 0.7s var(--ease);
 }
-.client-logo-card:hover::before { opacity: 1; transform: translateX(42%); }
+.client-logo-card:hover::before { opacity: 1; transform: scaleX(1); }
 .client-logo-card img {
   position: relative; z-index: 2; width: clamp(210px, 118%, 280px); max-width: none; height: auto;
   filter: saturate(0.95); transition: transform 0.5s var(--ease), filter 0.5s var(--ease);
