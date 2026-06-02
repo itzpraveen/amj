@@ -69,6 +69,7 @@
   <div class="hero-bg">
     <div class="hero-bg-cursor"><img class="hero-img kenburns" src="assets/hero-poster.jpg" alt="" /></div>
   </div>
+  <canvas class="hero-3d" aria-hidden="true"></canvas>
   <div class="hero-grid"></div>
   <canvas class="hero-particles"></canvas>
   <div class="hero-floaters" aria-hidden="true">
@@ -94,6 +95,13 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="history.html" data-magnetic="0.3">Our story <span class="arr">→</span></a>
         <a class="btn btn-ghost" href="brands.html" data-magnetic="0.3">View the portfolio <span class="arr">→</span></a>
+      </div>
+      <div class="hero-flow" aria-label="AMJ distribution flow">
+        <span>Principals</span>
+        <i></i>
+        <span>Doha hub</span>
+        <i></i>
+        <span>Retail · HORECA · Restaurants</span>
       </div>
     </div>
   </div>
@@ -155,20 +163,30 @@
       <h2 class="h2">Our highlights, by<br>the <em class="it">numbers</em>.</h2>
     </div>
     <div class="stats">
-      <div class="stat reveal">
+      <div class="stat reveal" data-tilt="4">
+        <div class="glare"></div>
         <div class="val"><span data-count="14" data-dec="0">0</span><span class="u">K</span></div>
         <div class="lab">Ambient storage · pallets</div>
+        <span class="stat-lane"></span>
       </div>
-      <div class="stat reveal" data-d="1">
+      <div class="stat reveal" data-d="1" data-tilt="4">
+        <div class="glare"></div>
         <div class="val"><span data-count="6" data-dec="0">0</span><span class="u">K</span></div>
         <div class="lab">Chilled storage · pallets</div>
+        <span class="stat-lane"></span>
       </div>
-      <div class="stat reveal" data-d="2">
+      <div class="stat reveal" data-d="2" data-tilt="4">
+        <div class="glare"></div>
         <div class="val"><span data-count="11" data-dec="0">0</span><span class="u">K</span></div>
         <div class="lab">Frozen storage · pallets</div>
+        <span class="stat-lane"></span>
       </div>
-      <div class="stat reveal" data-d="3">
+      <div class="stat reveal" data-d="3" data-tilt="4">
+        <div class="glare"></div>
         <div class="val"><span data-count="3" data-dec="0">0</span><span class="u">K+</span></div>
+        <div class="lab">Active customers served</div>
+        <span class="stat-lane"></span>
+      </div>
     </div>
   </div>
 </section>
@@ -385,6 +403,7 @@
 <script src="app.js"></script>
 <script src="fx.js"></script>
 <script src="wow.js"></script>
+<script type="module" src="logistics-3d.js"></script>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>

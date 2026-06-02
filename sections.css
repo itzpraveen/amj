@@ -117,11 +117,47 @@
 /* ---------- COUNTERS / INFRASTRUCTURE ---------- */
 .infra { background: var(--bg-2); border-block: 1px solid var(--line-soft); }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-top: 56px; }
-.stat { background: var(--bg-2); padding: 40px 30px; position: relative; }
+.stat {
+  background: var(--bg-2);
+  padding: 40px 30px;
+  position: relative;
+  overflow: hidden;
+  min-height: 190px;
+}
+.stat::before {
+  content: "";
+  position: absolute;
+  inset: auto 24px 24px 24px;
+  height: 1px;
+  background: var(--line-soft);
+}
 .stat .val { font-family: var(--serif); font-size: clamp(48px, 6vw, 86px); line-height: 0.9; letter-spacing: -0.02em; }
 .stat .val .u { color: var(--accent); font-size: 0.4em; vertical-align: super; font-style: italic; }
 .stat .lab { margin-top: 16px; font-size: 14px; color: var(--ink-3); letter-spacing: 0.02em; }
 .stat .ic { position: absolute; right: 26px; top: 30px; width: 30px; height: 30px; color: var(--ink-3); opacity: 0.5; }
+.stat-lane {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  height: 1px;
+  overflow: hidden;
+}
+.stat-lane::after {
+  content: "";
+  position: absolute;
+  width: 38%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: translateX(-120%);
+  animation: statLane 3.1s linear infinite;
+}
+.stat:nth-child(2) .stat-lane::after { animation-delay: 0.35s; }
+.stat:nth-child(3) .stat-lane::after { animation-delay: 0.7s; }
+.stat:nth-child(4) .stat-lane::after { animation-delay: 1.05s; }
+@keyframes statLane {
+  to { transform: translateX(280%); }
+}
 
 /* ---------- BRANDS ---------- */
 .brands-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-top: 56px; }
@@ -143,6 +179,19 @@
   position: relative;
   z-index: 2;
   transition: transform 0.55s var(--ease), filter 0.4s var(--ease), opacity 0.4s var(--ease);
+}
+.brand-cell.has-logo::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 46px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+  z-index: 2;
 }
 .brand-cell.has-logo .name {
   position: absolute;
@@ -167,6 +216,7 @@
   opacity: 0; transition: opacity 0.5s var(--ease);
 }
 .brand-cell:hover::before { opacity: 1; }
+.brand-cell:hover::after { opacity: 0.78; transform: scaleX(1); }
 .brand-cell:hover .brand-logo { transform: translate3d(0, -6px, 40px) scale(1.03); filter: saturate(1.05); }
 .brand-cell:hover .name { color: var(--ink); transform: translate3d(0, -8px, 40px); }
 .brand-cell:hover .cat { opacity: 1; transform: translateY(0); }

@@ -16,6 +16,8 @@
   .display.reveal-lines .ln > span { transform: none !important; }
   .hero .est, .hero .scroll-cue, .hero .hero-meta, .hero-floaters { opacity: 1 !important; transform: none !important; }
   .kenburns { animation: none !important; }
+  .hero-flow i::after, .stat-lane::after { animation: none !important; transform: none !important; opacity: 0.45; }
+  .hero-3d { opacity: 0.3; }
 }
 
 /* ---------- Mobile nav burger ---------- */
