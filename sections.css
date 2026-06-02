@@ -295,11 +295,57 @@
 /* ---------- RESTAURANTS ---------- */
 .resto { display: flex; flex-direction: column; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-top: 56px; }
 .resto-row {
-  background: var(--bg); display: grid; grid-template-columns: 90px 1.1fr 1fr 200px; align-items: center;
+  background: var(--bg); display: grid; grid-template-columns: 150px 1fr 1fr 190px; align-items: center;
   gap: 32px; padding: 30px 36px; position: relative; transition: background 0.5s var(--ease);
 }
 .resto-row:hover { background: var(--bg-2); }
 .resto-row .rno { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+.resto-logo-card {
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  transition: transform 0.5s var(--ease), border-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+.resto-logo-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 120%, oklch(0.585 0.108 244 / 0.22), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.resto-logo-card .rno {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  z-index: 2;
+}
+.resto-logo-card img {
+  width: auto;
+  max-width: 112px;
+  max-height: 58px;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.5s var(--ease);
+}
+.resto-logo-dark {
+  background: linear-gradient(145deg, oklch(0.19 0.045 250), oklch(0.12 0.025 250));
+  border-color: oklch(0.28 0.055 250 / 0.8);
+}
+.resto-logo-light { background: oklch(0.99 0.004 250); }
+.resto-row:hover .resto-logo-card {
+  transform: translateY(-3px);
+  border-color: color-mix(in oklch, var(--accent), var(--line-soft) 50%);
+  box-shadow: 0 18px 38px oklch(0 0 0 / 0.08);
+}
+.resto-row:hover .resto-logo-card::before { opacity: 1; }
+.resto-row:hover .resto-logo-card img { transform: translateY(-2px) scale(1.03); }
 .resto-row .rname { font-family: var(--serif); font-size: clamp(26px, 3vw, 40px); font-weight: 500; line-height: 1; transition: transform 0.5s var(--ease); }
 .resto-row:hover .rname { transform: translateX(8px); }
 .resto-row .rtag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-top: 12px; }
@@ -411,7 +457,7 @@
   .brand-directory { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .news-grid { grid-template-columns: 1fr; }
   .foot-top { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
-  .resto-row { grid-template-columns: 50px 1fr; gap: 8px 18px; }
+  .resto-row { grid-template-columns: 128px 1fr; gap: 14px 22px; }
   .resto-row .rdesc { grid-column: 2; }
   .resto-row .rcta { grid-column: 2; justify-self: start; margin-top: 8px; }
   .nav-links { display: none; }

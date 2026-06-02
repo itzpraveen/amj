@@ -238,6 +238,7 @@ html.reveal-on .reveal.in { opacity: 1; transform: none; }
 /* section frame */
 section { position: relative; z-index: 2; }
 .sect { padding-block: clamp(80px, 11vw, 168px); }
+section[id] { scroll-margin-top: 96px; }
 .sect-head { display: flex; flex-direction: column; gap: 22px; }
 
 /* hairline divider */

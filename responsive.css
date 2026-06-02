@@ -154,11 +154,27 @@ body.menu-open { overflow: hidden; }
   .brand-proof div:nth-child(2) { border-right: 0; }
   .brand-proof div:nth-child(-n+2) { border-bottom: 1px solid var(--line-soft); }
   .brand-cta-row { align-items: flex-start; flex-direction: column; }
-  .brand-note { align-items: flex-start; }
+  .brand-note {
+    width: 100%;
+    max-width: 100%;
+    align-items: flex-start;
+  }
+  .brand-note b { flex: 0 0 auto; }
+  .brand-note span { min-width: 0; }
+  .brand-intro > .btn { display: none; }
 
   /* restaurants: stack cleanly */
   .resto-row { grid-template-columns: 1fr; gap: 6px; padding: 24px 22px; }
   .resto-row .rno { font-size: 12px; }
+  .resto-logo-card {
+    width: 100%;
+    min-height: 102px;
+    margin-bottom: 14px;
+  }
+  .resto-logo-card img {
+    max-width: min(68%, 150px);
+    max-height: 58px;
+  }
   .resto-row .rname { font-size: clamp(26px, 9vw, 34px); }
   .resto-row .rdesc, .resto-row .rcta { grid-column: 1; }
   .resto-row .rcta { margin-top: 14px; }
