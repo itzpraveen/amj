@@ -106,11 +106,10 @@ body.menu-open { overflow: hidden; }
   .stat { padding: 30px 22px; }
   .stat .val { font-size: clamp(46px, 16vw, 64px); }
 
-  /* showreel */
-  .video-card { aspect-ratio: 3 / 4; }
-  .video-play { width: 70px; height: 70px; }
-  .video-play .tri { border-left-width: 16px; }
-  .video-meta .h3 { font-size: 22px; }
+  /* operations reel */
+  .ops-reel { aspect-ratio: 3 / 4; }
+  .ops-meta { bottom: 136px; }
+  .ops-meta .h3 { font-size: 22px; }
 
   /* brands */
   .brand-filter { gap: 8px; }

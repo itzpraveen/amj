@@ -37,12 +37,7 @@
       clabel.textContent = label || '';
     };
     document.querySelectorAll('a, button, .nav-cta, [data-tilt], input, .chip, .net-node').forEach((el) => {
-      const label = el.classList.contains('video-card') || el.classList.contains('video-play') ? 'Play' : '';
-      el.addEventListener('pointerenter', () => setHover(true, label));
-      el.addEventListener('pointerleave', () => setHover(false, ''));
-    });
-    document.querySelectorAll('.video-card').forEach((el) => {
-      el.addEventListener('pointerenter', () => setHover(true, 'Play'));
+      el.addEventListener('pointerenter', () => setHover(true, ''));
       el.addEventListener('pointerleave', () => setHover(false, ''));
     });
 

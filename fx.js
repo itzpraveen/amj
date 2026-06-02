@@ -1,5 +1,5 @@
 /* ============================================================
-   AMJ — FX: cursor 3D depth, tilt, hero particles, showreel
+   AMJ — FX: cursor 3D depth, tilt, hero particles, media reel
    ============================================================ */
 (function () {
   const root = document.documentElement;
@@ -117,17 +117,43 @@
     });
   }
 
-  /* ---- Showreel play (simulated playback) ---- */
-  document.querySelectorAll('.video-card').forEach((card) => {
-    const play = card.querySelector('.video-play');
-    const toggle = () => {
-      card.classList.toggle('playing');
-      if (!card.classList.contains('playing')) {
-        const bar = card.querySelector('.video-bar');
-        if (bar) { bar.style.transition = 'none'; bar.style.width = '0'; requestAnimationFrame(() => bar.style.transition = ''); }
-      }
+  /* ---- Real media operations reel ---- */
+  document.querySelectorAll('[data-reel]').forEach((reel) => {
+    const frames = [...reel.querySelectorAll('.ops-frame')];
+    const steps = [...reel.querySelectorAll('[data-reel-step]')];
+    const kicker = reel.querySelector('[data-reel-kicker]');
+    const title = reel.querySelector('[data-reel-title]');
+    const copy = reel.querySelector('[data-reel-copy]');
+    if (!frames.length || !steps.length) return;
+
+    let active = 0;
+    let timer = null;
+    const setActive = (next) => {
+      active = (next + frames.length) % frames.length;
+      frames.forEach((frame, i) => frame.classList.toggle('active', i === active));
+      steps.forEach((step, i) => step.classList.toggle('active', i === active));
+      const step = steps[active];
+      if (kicker) kicker.textContent = step.dataset.kicker || '';
+      if (title) title.textContent = step.dataset.title || '';
+      if (copy) copy.textContent = step.dataset.copy || '';
     };
-    card.addEventListener('click', toggle);
-    if (play) play.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+    const start = () => {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        if (motionOn()) setActive(active + 1);
+      }, 4800);
+    };
+
+    steps.forEach((step, i) => {
+      step.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setActive(i);
+        start();
+      });
+    });
+    reel.addEventListener('pointerenter', () => clearInterval(timer));
+    reel.addEventListener('pointerleave', start);
+    setActive(0);
+    start();
   });
 })();
