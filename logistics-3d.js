@@ -22,8 +22,13 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     return;
   }
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setClearColor(0x080706, 1);
+  // Decorative background: cap device pixel ratio well below native to keep the
+  // heavy procedural shaders affordable on high-DPI displays. Lowered once more
+  // by the adaptive guard below if the first second of frames runs slow.
+  let dprCap = window.innerWidth < 760 ? 1.35 : 1.5;
+  const applyDPR = () => renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprCap));
+  applyDPR();
+  renderer.setClearColor(0x070b18, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
 
   const scene = new THREE.Scene();
@@ -54,6 +59,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     }
   `;
 
+  // ---- Dusk sky: deep indigo zenith melting into a warm plum horizon, a low
+  // ember sun, faint twinkling stars and a breath of drifting dust. ----
   const backgroundFragment = `
     precision highp float;
 
@@ -82,7 +89,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
       float v = 0.0;
       float a = 0.5;
       mat2 m = mat2(1.62, 1.08, -1.08, 1.62);
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 4; i++) {
         v += a * noise21(p);
         p = m * p + 19.7;
         a *= 0.52;
@@ -92,20 +99,41 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
 
     void main() {
       vec2 uv = gl_FragCoord.xy / max(uResolution, vec2(1.0));
+      float aspectR = uResolution.x / max(uResolution.y, 1.0);
       vec2 p = uv * 2.0 - 1.0;
-      p.x *= uResolution.x / max(uResolution.y, 1.0);
+      p.x *= aspectR;
 
-      float horizon = smoothstep(0.05, 0.92, uv.y);
-      vec3 low = vec3(0.255, 0.142, 0.064);
-      vec3 high = vec3(0.020, 0.018, 0.016);
-      vec3 color = mix(low, high, horizon);
+      // Moonlit desert night: deep navy sky, faint cool light low on the horizon.
+      vec3 horizonCol = vec3(0.078, 0.104, 0.156);
+      vec3 midSky     = vec3(0.040, 0.058, 0.108);
+      vec3 zenith     = vec3(0.016, 0.026, 0.064);
+      vec3 color = mix(horizonCol, midSky, smoothstep(0.0, 0.55, uv.y));
+      color = mix(color, zenith, smoothstep(0.30, 1.0, uv.y));
 
-      float sun = exp(-length((p - vec2(-0.74 + uPointer.x * 0.08, 0.30 + uPointer.y * 0.04)) * vec2(1.18, 1.78)) * 2.15);
-      color += sun * vec3(0.300, 0.180, 0.076);
+      // Soft cool moon-glow low on the horizon (no warm sun).
+      vec2 sunPos = vec2(-0.28 + uPointer.x * 0.05, 0.04 + uPointer.y * 0.03);
+      float sd = length((p - sunPos) * vec2(1.0, 1.8));
+      float glow = exp(-sd * 1.3);
+      color += glow * vec3(0.32, 0.40, 0.54) * 0.55;
 
-      float haze = fbm(vec2(p.x * 1.35 + uTime * 0.010, p.y * 0.9));
-      color += haze * vec3(0.030, 0.020, 0.012) * (1.0 - smoothstep(0.10, 0.80, uv.y));
-      color *= 1.0 - smoothstep(0.42, 1.08, length(p)) * 0.38;
+      // Faint, slow-twinkling stars (small round points) confined to the upper sky.
+      vec2 cell = vec2(uv.x * aspectR, uv.y) * 96.0;
+      vec2 cid = floor(cell);
+      vec2 cf = fract(cell);
+      float present = step(0.91, hash21(cid));
+      vec2 sp = vec2(hash21(cid + 1.7), hash21(cid + 9.1));
+      float twinkle = 0.35 + 0.65 * sin(uTime * 1.1 + hash21(cid) * 52.0);
+      float star = present * smoothstep(0.16, 0.0, length(cf - sp)) * twinkle;
+      star *= smoothstep(0.40, 0.92, uv.y);
+      star *= 1.0 - clamp(glow * 1.6, 0.0, 1.0);
+      color += star * vec3(0.60, 0.62, 0.74) * 0.5;
+
+      // Faint cool cloud band drifting near the horizon.
+      float haze = fbm(vec2(p.x * 1.1 + uTime * 0.010, p.y * 0.80));
+      color += haze * vec3(0.024, 0.032, 0.048) * (1.0 - smoothstep(0.08, 0.82, uv.y));
+
+      // Cinematic vignette.
+      color *= 1.0 - smoothstep(0.42, 1.18, length(p)) * 0.46;
 
       gl_FragColor = vec4(color, 1.0);
     }
@@ -139,37 +167,37 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
       );
     }
 
+    // 3-octave fBm — trimmed from 5 for the vertex path, which is evaluated five
+    // times per vertex (height + four neighbours for the normal).
     float fbm(vec2 p) {
       float v = 0.0;
       float a = 0.5;
       mat2 m = mat2(1.64, 1.12, -1.12, 1.64);
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 3; i++) {
         v += a * noise21(p);
         p = m * p + 17.3;
-        a *= 0.52;
+        a *= 0.54;
       }
       return v;
     }
 
     float duneHeight(vec2 p) {
       float t = uTime;
-      vec2 q = p + uPointer * vec2(0.88, -0.50);
-      q.x += sin(q.y * 0.22 + t * 0.035) * 1.15;
-      vec2 wind = vec2(t * 0.046, t * 0.015);
+      vec2 q = p + uPointer * vec2(0.70, -0.40);
+      vec2 wind = vec2(t * 0.020, t * 0.006);
 
-      float broadA = sin(q.x * 0.28 + q.y * 0.40 + t * 0.070) * 0.98;
-      float broadB = sin(q.x * -0.19 + q.y * 0.30 - t * 0.050) * 0.62;
-      float broadC = sin(q.x * 0.12 + q.y * 0.18 + t * 0.035) * 0.34;
-      float ridgeNoise = fbm(q * 0.12 + wind * 1.15);
-      float ridgePhase = q.x * 0.72 + q.y * 0.54 + ridgeNoise * 1.85 + t * 0.16;
-      float ridgeWave = sin(ridgePhase);
-      float crest = pow(smoothstep(-0.18, 1.0, ridgeWave), 5.2) * 0.58;
-      float slipFace = smoothstep(0.20, 0.86, ridgeWave) * 0.34;
-      float leeShadow = smoothstep(-0.82, -0.20, -ridgeWave) * -0.12;
-      float grain = fbm(q * 1.05 + vec2(t * 0.12, -t * 0.045)) * 0.10;
-      float ripples = sin(q.x * 3.6 + q.y * 5.4 + fbm(q * 0.52) * 3.0 + t * 0.78) * 0.018;
+      // One dominant dune: a single ridge with a strongly curved (fbm-warped) crest line.
+      float warp = fbm(q * 0.050 + wind) * 3.2;
+      float ridge = q.x * 0.20 + q.y * 0.10 + warp;
+      float frac = fract(ridge * 0.1591549);                  // ridge / 2PI -> 0..1 across the dune
+      float windward = pow(smoothstep(0.0, 0.88, frac), 1.7); // long smooth windward face
+      float lee = 1.0 - smoothstep(0.88, 0.995, frac);         // sharp slip-face on the lee
+      float dune = windward * lee * 3.4;
 
-      return broadA + broadB + broadC + crest + slipFace + leeShadow + grain + ripples - 0.62;
+      // Gentle large-scale undulation; very smooth surface (no ripples).
+      float base = sin(q.x * 0.08 + q.y * 0.10 + t * 0.030) * 0.35;
+      float grain = fbm(q * 0.60) * 0.012;
+      return dune + base + grain - 1.50;
     }
 
     void main() {
@@ -194,6 +222,8 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     }
   `;
 
+  // ---- Bronze dunes: deep shadow, grazing ember key light, indigo sky fill on
+  // up-facing slopes, and a fresnel rim that catches the sun on crest edges. ----
   const duneFragment = `
     precision highp float;
 
@@ -226,10 +256,10 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
       float v = 0.0;
       float a = 0.5;
       mat2 m = mat2(1.62, 1.08, -1.08, 1.62);
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         v += a * noise21(p);
         p = m * p + 21.1;
-        a *= 0.52;
+        a *= 0.54;
       }
       return v;
     }
@@ -237,36 +267,38 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     void main() {
       vec3 n = normalize(vNormalW);
       vec3 viewDir = normalize(cameraPosition - vWorld);
-      vec3 sunDir = normalize(vec3(-0.56 + uPointer.x * 0.10, 0.70, 0.30));
-      vec3 rimDir = normalize(vec3(0.46, 0.18, -0.82));
+      vec3 sunDir = normalize(vec3(-0.64 + uPointer.x * 0.08, 0.30, 0.24));
 
       float diffuse = max(dot(n, sunDir), 0.0);
-      float rim = max(dot(n, rimDir), 0.0);
-      float spec = pow(max(dot(reflect(-sunDir, n), viewDir), 0.0), 34.0);
+      float sky = max(n.y, 0.0);
+      float fres = pow(1.0 - max(dot(n, viewDir), 0.0), 2.4);
+      float spec = pow(max(dot(reflect(-sunDir, n), viewDir), 0.0), 18.0);
       float slope = 1.0 - clamp(n.y, 0.0, 1.0);
 
-      vec3 shadow = vec3(0.068, 0.043, 0.026);
-      vec3 sand = vec3(0.560, 0.365, 0.160);
-      vec3 crest = vec3(0.98, 0.700, 0.300);
-      vec3 cool = vec3(0.032, 0.040, 0.040);
+      vec3 shadow  = vec3(0.016, 0.028, 0.072);
+      vec3 sand    = vec3(0.400, 0.420, 0.520);
+      vec3 crest   = vec3(0.770, 0.790, 0.880);
+      vec3 skyTint = vec3(0.050, 0.075, 0.140);
 
-      vec3 color = mix(shadow, sand, 0.18 + diffuse * 0.82);
-      color = mix(color, crest, spec * 0.52 + smoothstep(0.78, 1.0, diffuse) * 0.16);
-      color = mix(color, cool, rim * 0.10 + slope * 0.14);
+      vec3 color = mix(shadow, sand, 0.05 + diffuse * 0.95);
+      color += skyTint * sky * 0.28;
+      color = mix(color, crest, smoothstep(0.60, 1.0, diffuse) * 0.55 + spec * 0.22);
+      color += crest * fres * 0.10 * (0.30 + diffuse);
+      color = mix(color, shadow, slope * 0.16);
 
-      float ripple = sin(vWorld.x * 4.2 + vWorld.z * 7.2 + fbm(vWorld.xz * 0.44) * 3.8 + uTime * 0.74);
-      color += smoothstep(0.76, 0.99, ripple) * vec3(0.055, 0.034, 0.012) * (0.36 + diffuse);
-      color -= smoothstep(-0.98, -0.72, ripple) * vec3(0.018, 0.012, 0.007) * slope;
-      color += (vSand - 0.5) * vec3(0.050, 0.032, 0.014);
+      // Smooth moonlit sand — faint tonal variation only (no ripple lines).
+      color += (vSand - 0.5) * vec3(0.020, 0.022, 0.030);
 
       float farHaze = smoothstep(7.0, -11.0, vWorld.z);
-      color = mix(color, vec3(0.335, 0.255, 0.150), farHaze * 0.16);
+      color = mix(color, vec3(0.065, 0.090, 0.145), farHaze * 0.34);
       color *= 1.0 - smoothstep(0.65, 2.6, abs(vHeight)) * 0.06;
 
       gl_FragColor = vec4(color, 1.0);
     }
   `;
 
+  // ---- Sparse, silky sand drift: a faint warm shimmer that hugs the dune band
+  // and catches the ember light, instead of streaking across the whole sky. ----
   const windFragment = `
     precision highp float;
 
@@ -295,7 +327,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
       float v = 0.0;
       float a = 0.5;
       mat2 m = mat2(1.58, 0.96, -0.96, 1.58);
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < 3; i++) {
         v += a * noise21(p);
         p = m * p + 13.4;
         a *= 0.5;
@@ -307,23 +339,21 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
       vec2 uv = gl_FragCoord.xy / max(uResolution, vec2(1.0));
       float aspect = uResolution.x / max(uResolution.y, 1.0);
       vec2 p = vec2(uv.x * aspect, uv.y);
-      vec2 drift = vec2(uTime * 0.10, uTime * 0.013) + uPointer * vec2(0.09, -0.035);
+      vec2 drift = vec2(uTime * 0.040, uTime * 0.006) + uPointer * vec2(0.05, -0.02);
 
-      float wind = 0.0;
-      for (int i = 0; i < 3; i++) {
-        float fi = float(i);
-        vec2 q = p * (5.8 + fi * 2.15) + drift * (1.0 + fi * 0.35);
-        float band = sin(q.x * 2.0 + q.y * 8.8 + fbm(q * 0.32) * 3.8 + fi * 1.7);
-        float mask = smoothstep(0.70, 0.985, band);
-        mask *= smoothstep(0.08, 0.40, uv.y) * (1.0 - smoothstep(0.92, 1.0, uv.y));
-        wind += mask * (0.050 - fi * 0.009);
-      }
+      // Soft drifting veil, gated to the lower dune band so it reads as ground
+      // sand catching light rather than streaks across the sky.
+      float veil = fbm(p * 2.3 + drift * 0.7);
+      float body = smoothstep(0.54, 0.96, veil);
+      float shimmer = 0.5 + 0.5 * sin(p.x * 13.0 + p.y * 4.0 + fbm(p * 1.3) * 6.0 + uTime * 0.55);
 
-      float veil = fbm(p * 3.3 + drift * 0.52) * 0.052;
-      float edgeFade = smoothstep(0.0, 0.14, uv.x) * smoothstep(1.0, 0.86, uv.x);
-      float alpha = (wind + veil) * edgeFade * smoothstep(0.02, 0.22, uv.y);
+      float vert = smoothstep(0.08, 0.30, uv.y) * (1.0 - smoothstep(0.46, 0.78, uv.y));
+      float edgeFade = smoothstep(0.0, 0.16, uv.x) * smoothstep(1.0, 0.82, uv.x);
 
-      gl_FragColor = vec4(vec3(0.94, 0.68, 0.34), alpha);
+      float alpha = body * vert * edgeFade * (0.007 + shimmer * 0.009);
+      vec3 tint = vec3(0.56, 0.62, 0.76) * (0.6 + shimmer * 0.5);
+
+      gl_FragColor = vec4(tint, alpha);
     }
   `;
 
@@ -340,7 +370,11 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
   background.renderOrder = -10;
   scene.add(background);
 
-  const duneGeometry = new THREE.PlaneGeometry(34, 30, 280, 205);
+  // Lighter mesh than before (was 280x205) — the broad dune forms are
+  // low-frequency, so this resolution holds up while roughly halving vertex work.
+  const segX = window.innerWidth < 760 ? 150 : 210;
+  const segZ = window.innerWidth < 760 ? 110 : 150;
+  const duneGeometry = new THREE.PlaneGeometry(34, 30, segX, segZ);
   duneGeometry.rotateX(-Math.PI / 2);
   const dunes = new THREE.Mesh(
     duneGeometry,
@@ -369,6 +403,7 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
   scene.add(wind);
 
   function resize() {
+    applyDPR();
     const rect = canvas.getBoundingClientRect();
     state.width = Math.max(1, rect.width);
     state.height = Math.max(1, rect.height);
@@ -401,11 +436,38 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     state.targetY = (event.clientY / Math.max(window.innerHeight, 1) - 0.5) * -2;
   }, { passive: true });
 
+  // Adaptive quality: sample the first ~80 active frames and, if they run slow,
+  // drop the pixel ratio one notch so weaker GPUs still hold a smooth cadence.
+  let probeFrames = 0;
+  let probeAccum = 0;
+  let probeDone = false;
+
+  // Render loop is paused whenever the hero is off-screen or the tab is hidden.
+  let rafId = null;
+  let inView = true;
+  let tabVisible = !document.hidden;
+
   function frame() {
-    const dt = Math.min(clock.getDelta(), 0.034);
+    rafId = requestAnimationFrame(frame);
+
+    const raw = clock.getDelta();
+    const dt = Math.min(raw, 0.034);
     const activeMotion = motionOn();
     uniforms.uMotion.value = activeMotion ? 1 : 0;
     if (activeMotion) state.time += dt;
+
+    if (!probeDone && activeMotion && raw > 0.0001 && raw < 0.1) {
+      probeFrames += 1;
+      probeAccum += raw;
+      if (probeFrames >= 80) {
+        const avgMs = (probeAccum / probeFrames) * 1000;
+        if (avgMs > 20.5 && dprCap > 1.2) {
+          dprCap = 1.2;
+          resize();
+        }
+        probeDone = true;
+      }
+    }
 
     if (!finePointer && activeMotion) {
       state.targetX = Math.sin(state.time * 0.18) * 0.22;
@@ -419,11 +481,42 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.m
     updateCamera();
 
     renderer.render(scene, camera);
-    requestAnimationFrame(frame);
   }
+
+  function start() {
+    if (rafId === null) {
+      clock.getDelta();
+      frame();
+    }
+  }
+
+  function stop() {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  function syncRun() {
+    if (inView && tabVisible) start();
+    else stop();
+  }
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      inView = entries[0].isIntersecting;
+      syncRun();
+    }, { threshold: 0 });
+    io.observe(canvas);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    tabVisible = !document.hidden;
+    syncRun();
+  }, { passive: true });
 
   window.addEventListener('resize', resize, { passive: true });
   resize();
   updateCamera();
-  frame();
+  start();
 })();

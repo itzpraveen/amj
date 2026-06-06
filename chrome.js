@@ -5,22 +5,29 @@
    Set the active item with <body data-page="brands"> etc.
    ============================================================ */
 (function () {
-  const NAV = [
-    { id: 'history',        label: 'History',        href: 'history.html' },
-    { id: 'infrastructure', label: 'Infrastructure', href: 'infrastructure.html' },
-    { id: 'brands',         label: 'Brands',         href: 'brands.html' },
-    { id: 'restaurants',    label: 'Restaurants',    href: 'restaurants.html' },
-    { id: 'news',           label: 'News',           href: 'news.html' },
-  ];
   const active = document.body.getAttribute('data-page') || '';
+  const isA = (id) => id === active ? ' class="is-active"' : '';
+  const ddActive = (active === 'brands' || active === 'restaurants') ? ' is-active' : '';
 
-  const navLinks = NAV.map(n =>
-    `<a href="${n.href}"${n.id === active ? ' class="is-active"' : ''}>${n.label}</a>`
-  ).join('');
+  const navLinks = `
+    <a href="history.html"${isA('history')}>Legacy</a>
+    <a href="infrastructure.html"${isA('infrastructure')}>Excellence</a>
+    <div class="nav-dd${ddActive}">
+      <button type="button" class="nav-dd-toggle" aria-haspopup="true" aria-expanded="false">Division <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="nav-dd-menu" role="menu">
+        <a href="brands.html" role="menuitem"${isA('brands')}>FMCG Brands<small>Distributed food &amp; beverage labels</small></a>
+        <a href="restaurants.html" role="menuitem"${isA('restaurants')}>F&amp;B Brands<small>Dining &amp; restaurant concepts</small></a>
+      </div>
+    </div>
+    <a href="news.html"${isA('news')}>Media</a>`;
 
-  const mmLinks = NAV.map((n, i) =>
-    `<a href="${n.href}"><span class="mm-no">0${i + 1}</span>${n.label}</a>`
-  ).join('');
+  const mmLinks = `
+    <a href="history.html"><span class="mm-no">01</span>Legacy</a>
+    <a href="infrastructure.html"><span class="mm-no">02</span>Excellence</a>
+    <span class="mm-group">Division</span>
+    <a href="brands.html"><span class="mm-no">03</span>FMCG Brands</a>
+    <a href="restaurants.html"><span class="mm-no">04</span>F&amp;B Brands</a>
+    <a href="news.html"><span class="mm-no">05</span>Media</a>`;
 
   const navHTML = `
   <header class="nav nav--inner">
@@ -30,7 +37,7 @@
         <img class="logo logo-dark" src="assets/amj-logo-white.png" alt="Al Majid Jawad W.L.L" />
       </a>
       <nav class="nav-links">${navLinks}</nav>
-      <a class="nav-cta" href="contact.html" data-magnetic="0.35"><span class="pulse"></span>Ask AMJ</a>
+      <a class="nav-cta" href="contact.html" data-magnetic="0.35"><span class="pulse"></span>Connect</a>
       <button class="nav-burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
         <span></span><span></span><span></span>
       </button>
@@ -38,7 +45,7 @@
   </header>
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
     <nav class="mm-links">${mmLinks}</nav>
-    <a class="mm-cta" href="contact.html"><span class="pulse"></span>Ask AMJ</a>
+    <a class="mm-cta" href="contact.html"><span class="pulse"></span>Connect</a>
     <div class="mm-foot">info@amjqatar.me · Doha, State of Qatar</div>
   </div>`;
 
@@ -47,45 +54,45 @@
     <div class="wrap">
       <div class="foot-top">
         <div class="fbrand">
-          <span class="mark">AM<b>J</b></span>
+          <img class="foot-logo" src="assets/amj-logo-original.svg" alt="Al Majid Jawad" width="90" height="52" />
           <p style="color:var(--ink-3);font-size:15px;margin-top:18px;max-width:34ch;">Al Majid Jawad W.L.L — distributing the world's finest food &amp; beverage brands across the State of Qatar since 1997.</p>
         </div>
         <div>
           <h5>Company</h5>
           <ul>
-            <li><a href="history.html">History</a></li>
-            <li><a href="infrastructure.html">Infrastructure</a></li>
-            <li><a href="brands.html">Brands</a></li>
-            <li><a href="restaurants.html">Restaurants</a></li>
+            <li><a href="history.html">Legacy</a></li>
+            <li><a href="infrastructure.html">Excellence</a></li>
+            <li><a href="brands.html">FMCG Brands</a></li>
+            <li><a href="restaurants.html">F&amp;B Brands</a></li>
           </ul>
         </div>
         <div>
-          <h5>Connect</h5>
+          <h5>Explore</h5>
           <ul>
-            <li><a href="contact.html">Careers</a></li>
-            <li><a href="news.html">News &amp; Events</a></li>
+            <li><a href="news.html">Media</a></li>
             <li><a href="locate.html">Locate us</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="contact.html">Careers</a></li>
+            <li><a href="contact.html">Connect</a></li>
           </ul>
         </div>
         <div>
           <h5>Contact</h5>
           <ul>
             <li><a href="mailto:info@amjqatar.me">info@amjqatar.me</a></li>
-            <li><a href="#">LinkedIn</a></li>
-            <li><a href="contact.html">Ask AMJ</a></li>
+            <li><a href="https://www.linkedin.com/company/al-majid-jawad/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="contact.html">Connect</a></li>
           </ul>
         </div>
       </div>
       <div class="foot-bottom">
         <p>© <span id="year">2026</span> Al Majid Jawad W.L.L. All rights reserved.</p>
         <div class="foot-social">
-          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="https://www.linkedin.com/company/al-majid-jawad/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
           <a href="mailto:info@amjqatar.me" aria-label="Email">@</a>
         </div>
       </div>
     </div>
-    <div class="foot-mark">AM<b>J</b></div>
+    <div class="foot-mark"><img src="assets/amj-logo-original.svg" alt="" aria-hidden="true" /></div>
   </footer>`;
 
   function build() {

@@ -17,9 +17,10 @@
   --ink-3:     oklch(0.560 0.025 250);  /* muted / captions = brand grey */
 
   /* AMJ navy/steel accent + platinum detail */
-  --accent:    oklch(0.470 0.110 244);  /* brand navy, vivid on white */
-  --accent-hi: oklch(0.400 0.110 244);  /* hover (darker on light) */
+  --accent:    #164f7a;  /* Pantone 293 — official AMJ brand blue */
+  --accent-hi: #1f5f92;  /* hover — lighter brand blue */
   --accent-ink: oklch(0.990 0.004 250);
+  --brand-grey: #a3a6a9; /* Pantone Cool Grey */
   --brass:     oklch(0.560 0.060 245);  /* cool steel detail */
 
   /* helper surfaces (theme-aware) */

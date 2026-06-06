@@ -49,11 +49,18 @@ body.menu-open .mobile-menu { clip-path: circle(150% at calc(100% - 44px) 44px);
 .mm-links a:active { color: var(--accent); }
 .mm-no { font-family: var(--mono); font-size: 13px; color: var(--accent); letter-spacing: 0.1em; }
 body.menu-open .mm-links a { opacity: 1; transform: none; }
-body.menu-open .mm-links a:nth-child(1) { transition-delay: 0.12s; }
-body.menu-open .mm-links a:nth-child(2) { transition-delay: 0.18s; }
-body.menu-open .mm-links a:nth-child(3) { transition-delay: 0.24s; }
-body.menu-open .mm-links a:nth-child(4) { transition-delay: 0.30s; }
-body.menu-open .mm-links a:nth-child(5) { transition-delay: 0.36s; }
+body.menu-open .mm-links a:nth-of-type(1) { transition-delay: 0.12s; }
+body.menu-open .mm-links a:nth-of-type(2) { transition-delay: 0.18s; }
+body.menu-open .mm-links a:nth-of-type(3) { transition-delay: 0.26s; }
+body.menu-open .mm-links a:nth-of-type(4) { transition-delay: 0.32s; }
+body.menu-open .mm-links a:nth-of-type(5) { transition-delay: 0.38s; }
+.mm-group {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: oklch(0.72 0.02 250 / 0.7); padding: 16px 0 2px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+}
+body.menu-open .mm-group { opacity: 1; transform: none; transition-delay: 0.22s; }
 .mm-cta {
   margin-top: 34px; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px;
   font-weight: 600; font-size: 16px; letter-spacing: 0.03em; color: oklch(0.99 0.005 250);
