@@ -21,7 +21,7 @@
       </filter>
     </defs>
     <path class="truck-road" fill="none"></path>
-    <image class="truck" filter="url(#amjTruckShadow)" x="-29" y="-14.5" width="58" height="29" preserveAspectRatio="xMidYMid meet"></image>`;
+    <image class="truck" filter="url(#amjTruckShadow)" x="-42" y="-21" width="84" height="42" preserveAspectRatio="xMidYMid meet"></image>`;
   track.appendChild(svg);
 
   const road = svg.querySelector('.truck-road');
