@@ -52,13 +52,33 @@
     return p;
   }
 
-  // --- dune geometry (normalized). Peak left-of-centre; crest folds to a nose on the right. ---
-  const CREST = [
-    [-0.03, 0.57], [0.10, 0.49], [0.22, 0.425], [0.31, 0.375], [0.385, 0.347],
-    [0.45, 0.378], [0.51, 0.447], [0.565, 0.522], [0.612, 0.580], [0.648, 0.608],
-    [0.72, 0.592], [0.84, 0.560], [1.03, 0.552]
-  ];
-  const LIT = CREST.slice(0, 10).concat([[0.55, 0.71], [0.36, 0.82], [0.16, 0.88], [-0.03, 0.83]]);
+  // --- dune geometry (normalized). Wide layout for desktop; a lower, simpler
+  //     dune band for tall/portrait screens so it never squishes on mobile. ---
+  const DESK = {
+    crest: [
+      [-0.03, 0.57], [0.10, 0.49], [0.22, 0.425], [0.31, 0.375], [0.385, 0.347],
+      [0.45, 0.378], [0.51, 0.447], [0.565, 0.522], [0.612, 0.580], [0.648, 0.608],
+      [0.72, 0.592], [0.84, 0.560], [1.03, 0.552]
+    ],
+    tail: [[0.55, 0.71], [0.36, 0.82], [0.16, 0.88], [-0.03, 0.83]],
+    rimEnd: 10, peakY: 0.33, litBottom: 0.9, reflTop: 0.70,
+    nose: [0.605, 0.60], noseR: 0.14, sheen: [0.26, 0.50], sheenR: 0.30
+  };
+  const MOB = {
+    crest: [
+      [-0.06, 0.83], [0.14, 0.77], [0.30, 0.715], [0.44, 0.68],
+      [0.55, 0.695], [0.70, 0.76], [0.86, 0.82], [1.06, 0.825]
+    ],
+    tail: [[0.46, 0.90], [0.28, 0.96], [0.10, 1.0], [-0.06, 0.98]],
+    rimEnd: 5, peakY: 0.65, litBottom: 1.0, reflTop: 0.90,
+    nose: [0.55, 0.74], noseR: 0.16, sheen: [0.30, 0.83], sheenR: 0.42
+  };
+  let G = DESK, CREST = DESK.crest, LIT = CREST.slice(0, DESK.rimEnd).concat(DESK.tail);
+  function setGeo() {
+    G = (S.h / S.w > 1.15 || window.innerWidth < 720) ? MOB : DESK;
+    CREST = G.crest;
+    LIT = CREST.slice(0, G.rimEnd).concat(G.tail);
+  }
 
   // wind-blown sand off the crest
   let spray = [];
@@ -155,10 +175,12 @@
   function drawDune() {
     const dx = -S.px * S.w * 0.018, dy = -S.py * S.h * 0.01;
 
+    const lastX = CREST[CREST.length - 1][0], firstX = CREST[0][0];
+
     // whole dune silhouette -> deep navy shadow (the lee / right face stays dark)
     const shadow = smoothPath(CREST, dx, dy);
-    shadow.lineTo(1.03 * S.w + dx, S.h + 4); shadow.lineTo(-0.03 * S.w + dx, S.h + 4); shadow.closePath();
-    const sg = ctx.createLinearGradient(0, 0.33 * S.h + dy, 0, S.h);
+    shadow.lineTo(lastX * S.w + dx, S.h + 4); shadow.lineTo(firstX * S.w + dx, S.h + 4); shadow.closePath();
+    const sg = ctx.createLinearGradient(0, G.peakY * S.h + dy, 0, S.h);
     sg.addColorStop(0, '#0e1d33'); sg.addColorStop(0.5, '#081325'); sg.addColorStop(1, '#03060d');
     ctx.fillStyle = sg; ctx.fill(shadow);
 
@@ -166,7 +188,7 @@
     const lit = smoothPath(LIT, dx, dy);
     ctx.save();
     ctx.clip(lit);
-    const lg = ctx.createLinearGradient(0, 0.33 * S.h + dy, 0, 0.9 * S.h + dy);
+    const lg = ctx.createLinearGradient(0, G.peakY * S.h + dy, 0, G.litBottom * S.h + dy);
     lg.addColorStop(0, '#c6ccde');
     lg.addColorStop(0.30, '#9aa4c4');
     lg.addColorStop(0.62, '#5d6b97');
@@ -174,13 +196,13 @@
     lg.addColorStop(1, '#1c2c45');
     ctx.fillStyle = lg; ctx.fillRect(0, 0, S.w, S.h);
     // sky-reflection cool wash low on the face
-    const refl = ctx.createLinearGradient(0, 0.7 * S.h + dy, 0, S.h);
+    const refl = ctx.createLinearGradient(0, G.reflTop * S.h + dy, 0, S.h);
     refl.addColorStop(0, 'rgba(70,96,140,0)');
     refl.addColorStop(1, 'rgba(58,84,128,0.4)');
     ctx.fillStyle = refl; ctx.fillRect(0, 0, S.w, S.h);
     // soft moonlight sheen hotspot on the upper face
-    const sx = (0.26 - S.px * 0.02) * S.w + dx, sy = (0.5 + S.py * 0.01) * S.h + dy;
-    const sheen = ctx.createRadialGradient(sx, sy, 0, sx, sy, S.w * 0.3);
+    const sx = (G.sheen[0] - S.px * 0.02) * S.w + dx, sy = (G.sheen[1] + S.py * 0.01) * S.h + dy;
+    const sheen = ctx.createRadialGradient(sx, sy, 0, sx, sy, S.w * G.sheenR);
     sheen.addColorStop(0, 'rgba(220,226,240,0.28)');
     sheen.addColorStop(0.5, 'rgba(180,190,214,0.08)');
     sheen.addColorStop(1, 'rgba(180,190,214,0)');
@@ -196,14 +218,14 @@
     ctx.restore();
 
     // nose / fold — a soft dark pocket under the right of the crest
-    const nx = 0.605 * S.w + dx, ny = 0.60 * S.h + dy;
-    const nose = ctx.createRadialGradient(nx, ny, 0, nx, ny, S.w * 0.14);
+    const nx = G.nose[0] * S.w + dx, ny = G.nose[1] * S.h + dy;
+    const nose = ctx.createRadialGradient(nx, ny, 0, nx, ny, S.w * G.noseR);
     nose.addColorStop(0, 'rgba(4,9,18,0.55)');
     nose.addColorStop(1, 'rgba(4,9,18,0)');
     ctx.save(); ctx.clip(shadow); ctx.fillStyle = nose; ctx.fillRect(0, 0, S.w, S.h); ctx.restore();
 
     // crest rim — a thin moonlit edge along the lit crest (up to the nose)
-    const rim = smoothPath(CREST.slice(0, 10), dx, dy);
+    const rim = smoothPath(CREST.slice(0, G.rimEnd), dx, dy);
     ctx.save();
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     ctx.strokeStyle = 'rgba(214,222,240,0.55)'; ctx.lineWidth = 1.4; ctx.stroke(rim);
@@ -267,6 +289,7 @@
     S.w = Math.max(1, rect.width); S.h = Math.max(1, rect.height);
     S.dpr = Math.min(window.devicePixelRatio || 1, S.w < 760 ? 1.3 : 1.5);
     canvas.width = Math.round(S.w * S.dpr); canvas.height = Math.round(S.h * S.dpr);
+    setGeo();
     bakeSky(); bakeGrain(); seedSpray(); render(0);
   }
 
