@@ -22,18 +22,7 @@
       </filter>
     </defs>
     <path class="truck-road" fill="none"></path>
-    <g class="truck" filter="url(#amjTruckShadow)">
-      <rect x="-12" y="-25" width="24" height="31" rx="3.2" fill="#e9eef4" stroke="#14324f" stroke-width="1"/>
-      <line x1="-12" y1="-9" x2="12" y2="-9" stroke="#b9c4d2" stroke-width="0.8"/>
-      <rect x="-14.6" y="-19" width="3.4" height="9" rx="1.6" fill="#1b1c22"/>
-      <rect x="11.2" y="-19" width="3.4" height="9" rx="1.6" fill="#1b1c22"/>
-      <rect x="-14.6" y="-1" width="3.4" height="8" rx="1.6" fill="#1b1c22"/>
-      <rect x="11.2" y="-1" width="3.4" height="8" rx="1.6" fill="#1b1c22"/>
-      <rect x="-12" y="5" width="24" height="14" rx="3.2" fill="#164f7a" stroke="#14324f" stroke-width="1"/>
-      <rect x="-8.5" y="12.5" width="17" height="4.5" rx="1.8" fill="#bcd6ee"/>
-      <circle cx="-6.6" cy="9" r="1.2" fill="#ffe0a0"/>
-      <circle cx="6.6" cy="9" r="1.2" fill="#ffe0a0"/>
-    </g>`;
+    <image class="truck" filter="url(#amjTruckShadow)" x="-21" y="-10.5" width="42" height="21" preserveAspectRatio="xMidYMid meet"></image>`;
   track.appendChild(svg);
 
   const road = svg.querySelector('.truck-road');
@@ -47,6 +36,7 @@
     on = margin >= 90 && window.innerWidth >= 1024;
     track.style.display = on ? 'block' : 'none';
     if (!on) return;
+    if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
     W = Math.min(152, margin);
     H = window.innerHeight;
@@ -55,8 +45,8 @@
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-    // winding road kept strictly inside the margin band [16, W-16]
-    const x0 = 16, x1 = W - 16, mid = (x0 + x1) / 2, amp = (x1 - x0) / 2;
+    // winding road kept strictly inside the margin band (leaves room for the truck length)
+    const x0 = 20, x1 = W - 24, mid = (x0 + x1) / 2, amp = (x1 - x0) / 2;
     const yTop = 100, yBot = H - 30, N = 96;
     let d = '';
     for (let i = 0; i <= N; i++) {
@@ -78,7 +68,7 @@
     const p = road.getPointAtLength(l);
     const q = road.getPointAtLength(Math.min(len, l + 1.5));
     const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
-    truck.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${(ang - 90).toFixed(1)})`);
+    truck.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${ang.toFixed(1)})`);
   }
 
   function onScroll() {
