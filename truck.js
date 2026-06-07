@@ -21,13 +21,14 @@
       </filter>
     </defs>
     <path class="truck-road" fill="none"></path>
-    <image class="truck" filter="url(#amjTruckShadow)" x="-42" y="-21" width="84" height="42" preserveAspectRatio="xMidYMid meet"></image>`;
+    <g class="truck-pos"><image class="truck" filter="url(#amjTruckShadow)" x="-42" y="-21" width="84" height="42" preserveAspectRatio="xMidYMid meet"></image></g>`;
   track.appendChild(svg);
 
   const road = svg.querySelector('.truck-road');
   const truck = svg.querySelector('.truck');
+  const truckPos = svg.querySelector('.truck-pos');
 
-  let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0;
+  let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0, lastProg = 0, dir = 1;
 
   function build() {
     on = window.innerWidth >= 1024;
@@ -63,11 +64,15 @@
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const span = max - heroH;
     const prog = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - heroH) / span)) : 0;
+    // flip the truck to face its travel direction, so reversing reads as driving back
+    if (prog > lastProg + 0.0008) { dir = 1; lastProg = prog; }
+    else if (prog < lastProg - 0.0008) { dir = -1; lastProg = prog; }
     const l = prog * len;
     const p = road.getPointAtLength(l);
     const q = road.getPointAtLength(Math.min(len, l + 1.5));
-    const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
-    truck.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${ang.toFixed(1)})`);
+    const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI + (dir < 0 ? 180 : 0);
+    truckPos.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`);
+    truck.style.transform = `rotate(${ang.toFixed(1)}deg)`;
     // never on the hero — fade in once the hero has (mostly) scrolled away
     const op = Math.min(1, Math.max(0, (window.scrollY - heroH * 0.7) / (heroH * 0.3)));
     truck.style.opacity = op.toFixed(2);
