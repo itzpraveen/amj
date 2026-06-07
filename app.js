@@ -64,27 +64,14 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('[data-count]').forEach((el) => cio.observe(el));
 
-  /* ---- Hero parallax ---- */
+  /* ---- Hero parallax disabled: dune depth must stay stable. ---- */
   const heroBg = document.querySelector('.hero-bg');
   const heroInner = document.querySelector('.hero-inner');
-  let ticking = false;
-  window.addEventListener('scroll', () => {
-    if (!motionOn()) return;
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (heroBg && y < window.innerHeight * 1.2) {
-          heroBg.style.transform = `translateY(${y * 0.28}px) scale(1.05)`;
-          if (heroInner) {
-            heroInner.style.transform = `translateY(${y * 0.12}px)`;
-            heroInner.style.opacity = String(Math.max(0, 1 - y / (window.innerHeight * 0.75)));
-          }
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
+  if (heroBg) heroBg.style.transform = 'none';
+  if (heroInner) {
+    heroInner.style.transform = 'none';
+    heroInner.style.opacity = '1';
+  }
 
   /* ---- Marquee strip (duplicated, css-less JS loop for seamless) ---- */
   const track = document.querySelector('.strip .track');

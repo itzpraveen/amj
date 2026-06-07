@@ -18,6 +18,9 @@
   text-transform: uppercase; opacity: 0; transition: opacity .3s; mix-blend-mode: difference;
 }
 body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor [data-tilt], body.has-cursor .nav-cta, body.has-cursor input { cursor: none; }
+body.has-cursor.hero-native-cursor,
+body.has-cursor.hero-native-cursor .hero,
+body.has-cursor.hero-native-cursor .hero * { cursor: default; }
 .cursor-ring.hover { width: 66px; height: 66px; margin: -33px 0 0 -33px; background: rgba(255,255,255,0.10); }
 .cursor-ring.label { width: 92px; height: 92px; margin: -46px 0 0 -46px; background: rgba(255,255,255,0.14); }
 .cursor-ring.label .clabel { opacity: 1; }

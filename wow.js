@@ -12,19 +12,34 @@
 
   /* ---------- Custom magnetic cursor ---------- */
   if (fine) {
-    const dot = document.createElement('div'); dot.className = 'cursor-dot';
-    const ring = document.createElement('div'); ring.className = 'cursor-ring';
+    const dot = document.createElement('div'); dot.className = 'cursor-dot cursor-hidden';
+    const ring = document.createElement('div'); ring.className = 'cursor-ring cursor-hidden';
     const clabel = document.createElement('span'); clabel.className = 'clabel'; ring.appendChild(clabel);
     document.body.append(dot, ring);
     document.body.classList.add('has-cursor');
 
+    const hero = document.querySelector('.hero');
     let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, vis = false;
+    const hideCursor = () => {
+      dot.classList.add('cursor-hidden');
+      ring.classList.add('cursor-hidden');
+      vis = false;
+    };
     window.addEventListener('pointermove', (e) => {
+      if (hero && e.target instanceof Node && hero.contains(e.target)) {
+        document.body.classList.add('hero-native-cursor');
+        hideCursor();
+        return;
+      }
+      document.body.classList.remove('hero-native-cursor');
       mx = e.clientX; my = e.clientY;
       if (!vis) { vis = true; dot.classList.remove('cursor-hidden'); ring.classList.remove('cursor-hidden'); }
       dot.style.transform = `translate(${mx}px, ${my}px)`;
     });
-    document.addEventListener('mouseleave', () => { dot.classList.add('cursor-hidden'); ring.classList.add('cursor-hidden'); vis = false; });
+    document.addEventListener('mouseleave', () => {
+      hideCursor();
+      document.body.classList.remove('hero-native-cursor');
+    });
     (function ringLoop() {
       rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
       ring.style.transform = `translate(${rx}px, ${ry}px)`;

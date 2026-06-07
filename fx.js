@@ -5,29 +5,9 @@
   const root = document.documentElement;
   const motionOn = () => root.getAttribute('data-motion') !== 'off';
 
-  /* ---- Cursor → smoothed depth for hero layers ---- */
+  /* ---- Hero depth is fixed: the dune canvas owns the only hero motion. ---- */
   const heroCursor = document.querySelector('.hero-bg-cursor');
-  const floaters = [...document.querySelectorAll('.floater')];
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-  window.addEventListener('pointermove', (e) => {
-    tx = (e.clientX / window.innerWidth - 0.5) * 2;
-    ty = (e.clientY / window.innerHeight - 0.5) * 2;
-  }, { passive: true });
-
-  function depthLoop() {
-    if (motionOn()) {
-      cx += (tx - cx) * 0.06;
-      cy += (ty - cy) * 0.06;
-    }
-    if (heroCursor) heroCursor.style.transform = `translate3d(${cx * -16}px, ${cy * -16}px, 0)`;
-    floaters.forEach((f) => {
-      const d = parseFloat(f.dataset.depth || 0.6);
-      const rot = parseFloat(f.dataset.rot || 0);
-      f.style.transform = `translate3d(${cx * -46 * d}px, ${cy * -46 * d}px, 0) rotate(${rot}deg)`;
-    });
-    requestAnimationFrame(depthLoop);
-  }
-  depthLoop();
+  if (heroCursor) heroCursor.style.transform = 'none';
 
   /* ---- 3D tilt-on-cursor for [data-tilt] ---- */
   document.querySelectorAll('[data-tilt]').forEach((el) => {
