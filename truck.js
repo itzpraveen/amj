@@ -31,22 +31,31 @@
   let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0, lastProg = 0, dir = 1;
 
   function build() {
-    on = window.innerWidth >= 1024;
-    track.style.display = on ? 'block' : 'none';
-    if (!on) return;
+    on = true;
+    track.style.display = 'block';
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
     W = window.innerWidth;
     H = window.innerHeight;
+    const mobile = W < 1024;
     const hero = document.querySelector('.hero');
     heroH = hero ? hero.offsetHeight : H;
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-    // full-width elliptical serpentine: the truck sweeps left <-> right as it descends
-    const pad = 48, mid = W / 2, amp = (W - 2 * pad) / 2;
-    const yTop = 96, yBot = H - 46, N = 150, waves = 2.5;
+    // smaller truck on phones so it doesn't dominate the narrow screen
+    const tw = mobile ? 52 : 84, th = tw / 2;
+    truck.setAttribute('x', -tw / 2);
+    truck.setAttribute('y', -th / 2);
+    truck.setAttribute('width', tw);
+    truck.setAttribute('height', th);
+
+    // elliptical serpentine: the truck sweeps edge-to-edge as it descends.
+    // sine dwells at the screen edges and only zips briefly through the centre,
+    // so on mobile it spends most of its time clear of the body text.
+    const pad = mobile ? 30 : 48, mid = W / 2, amp = (W - 2 * pad) / 2;
+    const yTop = mobile ? 80 : 96, yBot = H - 46, N = 150, waves = mobile ? 3 : 2.5;
     let d = '';
     for (let i = 0; i <= N; i++) {
       const tt = i / N;
