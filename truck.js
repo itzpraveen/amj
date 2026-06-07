@@ -21,7 +21,7 @@
       </filter>
     </defs>
     <path class="truck-road" fill="none"></path>
-    <image class="truck" filter="url(#amjTruckShadow)" x="-21" y="-10.5" width="42" height="21" preserveAspectRatio="xMidYMid meet"></image>`;
+    <image class="truck" filter="url(#amjTruckShadow)" x="-29" y="-14.5" width="58" height="29" preserveAspectRatio="xMidYMid meet"></image>`;
   track.appendChild(svg);
 
   const road = svg.querySelector('.truck-road');
@@ -44,8 +44,8 @@
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
     // full-width elliptical serpentine: the truck sweeps left <-> right as it descends
-    const pad = 66, mid = W / 2, amp = (W - 2 * pad) / 2;
-    const yTop = 96, yBot = H - 46, N = 150, waves = 3;
+    const pad = 48, mid = W / 2, amp = (W - 2 * pad) / 2;
+    const yTop = 96, yBot = H - 46, N = 150, waves = 2.5;
     let d = '';
     for (let i = 0; i <= N; i++) {
       const tt = i / N;
