@@ -1,9 +1,8 @@
 /* ============================================================
    Scroll-linked delivery truck (top-down).
-   Winds down a curved road in the left page margin, positioned
-   by scroll progress: scroll down drives it down, scroll up
-   reverses it. Stays strictly in the margin (off the content);
-   auto-hides when the margin is too narrow.
+   Sweeps left <-> right in a smooth elliptical serpentine down the
+   page, positioned by scroll progress: scroll down drives it down,
+   scroll up reverses it. Starts below the hero; desktop only.
    ============================================================ */
 (function () {
   const NS = 'http://www.w3.org/2000/svg';
@@ -28,31 +27,30 @@
   const road = svg.querySelector('.truck-road');
   const truck = svg.querySelector('.truck');
 
-  let W = 0, H = 0, len = 0, on = false, ticking = false;
+  let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0;
 
   function build() {
-    const wrap = document.querySelector('.sect .wrap') || document.querySelector('.wrap');
-    const margin = wrap ? wrap.getBoundingClientRect().left : 0;
-    on = margin >= 90 && window.innerWidth >= 1024;
+    on = window.innerWidth >= 1024;
     track.style.display = on ? 'block' : 'none';
     if (!on) return;
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
-    W = Math.min(152, margin);
+    W = window.innerWidth;
     H = window.innerHeight;
-    track.style.width = W + 'px';
+    const hero = document.querySelector('.hero');
+    heroH = hero ? hero.offsetHeight : H;
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-    // winding road kept strictly inside the margin band (leaves room for the truck length)
-    const x0 = 20, x1 = W - 24, mid = (x0 + x1) / 2, amp = (x1 - x0) / 2;
-    const yTop = 100, yBot = H - 30, N = 96;
+    // full-width elliptical serpentine: the truck sweeps left <-> right as it descends
+    const pad = 66, mid = W / 2, amp = (W - 2 * pad) / 2;
+    const yTop = 96, yBot = H - 46, N = 150, waves = 3;
     let d = '';
     for (let i = 0; i <= N; i++) {
       const tt = i / N;
       const y = yTop + (yBot - yTop) * tt;
-      const x = mid + amp * Math.sin(tt * Math.PI * 3);
+      const x = mid + amp * Math.sin(tt * Math.PI * waves);
       d += (i ? ' L ' : 'M ') + x.toFixed(1) + ' ' + y.toFixed(1);
     }
     road.setAttribute('d', d);
@@ -63,12 +61,16 @@
   function place() {
     if (!on) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const prog = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    const span = max - heroH;
+    const prog = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - heroH) / span)) : 0;
     const l = prog * len;
     const p = road.getPointAtLength(l);
     const q = road.getPointAtLength(Math.min(len, l + 1.5));
     const ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
     truck.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${ang.toFixed(1)})`);
+    // never on the hero — fade in once the hero has (mostly) scrolled away
+    const op = Math.min(1, Math.max(0, (window.scrollY - heroH * 0.7) / (heroH * 0.3)));
+    truck.style.opacity = op.toFixed(2);
   }
 
   function onScroll() {
