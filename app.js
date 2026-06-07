@@ -46,14 +46,15 @@
     const target = parseFloat(el.dataset.count);
     const dur = 1700;
     const dec = (el.dataset.dec | 0);
-    if (!motionOn()) { el.textContent = target.toFixed(dec); return; }
+    const fmt = (v) => v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    if (!motionOn()) { el.textContent = fmt(target); return; }
     const start = performance.now();
     function tick(now) {
       const p = Math.min((now - start) / dur, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = (target * eased).toFixed(dec);
+      el.textContent = fmt(target * eased);
       if (p < 1) requestAnimationFrame(tick);
-      else el.textContent = target.toFixed(dec);
+      else el.textContent = fmt(target);
     }
     requestAnimationFrame(tick);
   }
