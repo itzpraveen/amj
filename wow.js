@@ -78,19 +78,38 @@
     const nodesEl = map.querySelector('.nodes');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     // abstract Qatar layout (% of frame). hub = Doha
+    // balanced distribution network filling the full-width backdrop,
+    // radiating from a central hub (Doha HQ)
     const CITIES = [
-      { n: 'Doha · HQ', x: 70, y: 60, hub: true },
-      { n: 'Al Wakrah', x: 72, y: 72 },
-      { n: 'Mesaieed', x: 74, y: 84 },
-      { n: 'Al Rayyan', x: 58, y: 58 },
-      { n: 'Umm Salal', x: 64, y: 47 },
-      { n: 'Al Khor', x: 66, y: 32 },
-      { n: 'Ras Laffan', x: 62, y: 19 },
-      { n: 'Ash Shamal', x: 54, y: 9 },
-      { n: 'Dukhan', x: 30, y: 50 },
-      { n: 'Al Shahaniya', x: 46, y: 52 }
+      { n: 'Doha · HQ',     x: 50, y: 50, hub: true },
+      { n: 'Al Khor',       x: 50, y: 15 },
+      { n: 'Ash Shamal',    x: 36, y: 23 },
+      { n: 'Ras Laffan',    x: 64, y: 22 },
+      { n: 'Lusail',        x: 23, y: 18 },
+      { n: 'Sealine',       x: 77, y: 19 },
+      { n: 'Al Rayyan',     x: 31, y: 43 },
+      { n: 'Al Khor Coast', x: 69, y: 43 },
+      { n: 'Dukhan',        x: 12, y: 33 },
+      { n: 'Madinat',       x: 88, y: 33 },
+      { n: 'Al Shahaniya',  x: 9,  y: 60 },
+      { n: 'Al Daayen',     x: 91, y: 60 },
+      { n: 'Industrial',    x: 22, y: 73 },
+      { n: 'Port',          x: 78, y: 73 },
+      { n: 'Mesaieed',      x: 37, y: 80 },
+      { n: 'Al Wakrah',     x: 63, y: 80 },
+      { n: 'Umm Salal',     x: 50, y: 86 }
     ];
     const hub = CITIES[0];
+    // light mesh: connect each node to its two nearest neighbours
+    const LINKS = [];
+    (function () {
+      const seen = new Set();
+      CITIES.forEach((a, i) => {
+        CITIES.map((b, j) => ({ j, d: (a.x - b.x) ** 2 + (a.y - b.y) ** 2 }))
+          .filter(o => o.j !== i).sort((p, q) => p.d - q.d).slice(0, 2)
+          .forEach(o => { const k = i < o.j ? i + '_' + o.j : o.j + '_' + i; if (!seen.has(k)) { seen.add(k); LINKS.push([i, o.j]); } });
+      });
+    })();
     let W, H;
     function place() {
       nodesEl.innerHTML = '';
@@ -108,30 +127,42 @@
       W = cv.width = map.clientWidth * dpr;
       H = cv.height = map.clientHeight * dpr;
     }
-    const pulses = CITIES.filter(c => !c.hub).map((c, i) => ({ c, t: Math.random(), speed: 0.0025 + Math.random() * 0.0025 }));
+    const pulses = [];
+    for (let i = 0; i < 9; i++) {
+      const c = CITIES[1 + Math.floor(Math.random() * (CITIES.length - 1))];
+      pulses.push({ c, t: Math.random(), speed: 0.0022 + Math.random() * 0.0026 });
+    }
     function px(c) { return [c.x / 100 * W, c.y / 100 * H]; }
+    function ctrl(ax, ay, bx, by) { return [(ax + bx) / 2 + (ay - by) * 0.12, (ay + by) / 2 + (bx - ax) * 0.12]; }
     function frame() {
       ctx.clearRect(0, 0, W, H);
       const [hx, hy] = px(hub);
-      // routes
+      // faint network fabric — each node to its nearest neighbours
+      ctx.lineWidth = 1 * dpr; ctx.strokeStyle = 'rgba(120,170,225,0.10)';
+      LINKS.forEach(([i, j]) => {
+        const [ax, ay] = px(CITIES[i]), [bx, by] = px(CITIES[j]);
+        const [cx2, cy2] = ctrl(ax, ay, bx, by);
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.quadraticCurveTo(cx2, cy2, bx, by); ctx.stroke();
+      });
+      // delivery lanes radiating from the hub
+      ctx.strokeStyle = 'rgba(132,188,236,0.20)';
       CITIES.forEach((c) => {
         if (c.hub) return;
         const [x, y] = px(c);
-        const mx2 = (hx + x) / 2 + (hy - y) * 0.12, my2 = (hy + y) / 2 + (x - hx) * 0.12;
-        ctx.beginPath(); ctx.moveTo(hx, hy); ctx.quadraticCurveTo(mx2, my2, x, y);
-        ctx.strokeStyle = 'rgba(120,180,230,0.22)'; ctx.lineWidth = 1 * dpr; ctx.stroke();
+        const [mx2, my2] = ctrl(hx, hy, x, y);
+        ctx.beginPath(); ctx.moveTo(hx, hy); ctx.quadraticCurveTo(mx2, my2, x, y); ctx.stroke();
       });
       // traveling delivery pulses (van glints)
       pulses.forEach((p) => {
         if (motionOn()) p.t += p.speed; if (p.t > 1) p.t -= 1;
         const [x, y] = px(p.c);
-        const mx2 = (hx + x) / 2 + (hy - y) * 0.12, my2 = (hy + y) / 2 + (x - hx) * 0.12;
+        const [mx2, my2] = ctrl(hx, hy, x, y);
         const t = p.t, it = 1 - t;
         const bx = it * it * hx + 2 * it * t * mx2 + t * t * x;
         const by = it * it * hy + 2 * it * t * my2 + t * t * y;
-        const g = ctx.createRadialGradient(bx, by, 0, bx, by, 7 * dpr);
-        g.addColorStop(0, 'rgba(120,235,170,0.95)'); g.addColorStop(1, 'rgba(120,235,170,0)');
-        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, by, 7 * dpr, 0, 7); ctx.fill();
+        const g = ctx.createRadialGradient(bx, by, 0, bx, by, 8 * dpr);
+        g.addColorStop(0, 'rgba(130,240,180,0.95)'); g.addColorStop(1, 'rgba(130,240,180,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(bx, by, 8 * dpr, 0, 7); ctx.fill();
       });
       requestAnimationFrame(frame);
     }

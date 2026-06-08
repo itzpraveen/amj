@@ -482,8 +482,8 @@
 .cover-scrim {
   position: absolute; inset: 0; z-index: 3; pointer-events: none;
   background:
-    radial-gradient(120% 86% at 50% 44%, oklch(0.18 0.04 252 / 0.18), oklch(0.12 0.03 250 / 0.88) 78%),
-    linear-gradient(to bottom, oklch(0.13 0.03 250 / 0.55), transparent 26%, transparent 74%, oklch(0.13 0.03 250 / 0.55));
+    radial-gradient(72% 58% at 50% 50%, oklch(0.12 0.03 250 / 0.80), transparent 72%),
+    linear-gradient(to bottom, oklch(0.12 0.03 250 / 0.55), transparent 20%, transparent 80%, oklch(0.12 0.03 250 / 0.55));
 }
 .cover-inner {
   position: relative; z-index: 4;
@@ -491,9 +491,9 @@
 }
 .cover-inner > .reveal { width: 100%; display: flex; flex-direction: column; align-items: center; }
 .cover-stage .kicker { justify-content: center; color: oklch(0.80 0.07 240); }
-.cover-stage .h2 { color: oklch(0.97 0.012 250); }
+.cover-stage .h2 { color: oklch(0.97 0.012 250); text-shadow: 0 2px 26px oklch(0.08 0.02 250 / 0.7); }
 .cover-stage .h2 .it { color: oklch(0.84 0.045 75); }
-.cover-stage .lede { color: oklch(0.87 0.02 250 / 0.85); max-width: 56ch; margin-inline: auto; }
+.cover-stage .lede { color: oklch(0.87 0.02 250 / 0.85); max-width: 56ch; margin-inline: auto; text-shadow: 0 1px 16px oklch(0.08 0.02 250 / 0.6); }
 .cover-inner .client-logos { max-width: 760px; width: 100%; margin-inline: auto; }
 .cover-stage .client-logo-card {
   background: oklch(0.98 0.006 250 / 0.96); border-radius: 14px;
