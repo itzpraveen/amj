@@ -259,6 +259,12 @@
     veil.addColorStop(0.5, 'rgba(206,214,234,0.05)');
     veil.addColorStop(1, 'rgba(206,214,234,0)');
     ctx.fillStyle = veil; ctx.fillRect(0, 0, S.w, S.h);
+    // soften the thin spur where the lit face tapers into the lee
+    const spx = (CREST[G.rimEnd - 1][0] + 0.015) * S.w + dx, spy = CREST[G.rimEnd - 1][1] * S.h + dy;
+    const spur = ctx.createRadialGradient(spx, spy, 0, spx, spy, S.w * 0.11);
+    spur.addColorStop(0, 'rgba(7,14,28,0.55)');
+    spur.addColorStop(1, 'rgba(7,14,28,0)');
+    ctx.fillStyle = spur; ctx.fillRect(0, 0, S.w, S.h);
     ctx.restore();
 
     // nose / fold — a soft dark pocket under the right of the crest
@@ -268,12 +274,22 @@
     nose.addColorStop(1, 'rgba(4,9,18,0)');
     ctx.save(); ctx.clip(shadow); ctx.fillStyle = nose; ctx.fillRect(0, 0, S.w, S.h); ctx.restore();
 
-    // crest rim — a thin moonlit edge along the lit crest (up to the nose)
+    // crest rim — a thin moonlit edge along the lit crest, fading out before
+    // the tip so it doesn't form a hard bright spur where it meets the lee
     const rim = smoothPath(CREST.slice(0, G.rimEnd), dx, dy);
+    const rimX0 = CREST[0][0] * S.w + dx, rimX1 = CREST[G.rimEnd - 1][0] * S.w + dx;
+    const rgThin = ctx.createLinearGradient(rimX0, 0, rimX1, 0);
+    rgThin.addColorStop(0, 'rgba(214,222,240,0.55)');
+    rgThin.addColorStop(0.7, 'rgba(214,222,240,0.5)');
+    rgThin.addColorStop(1, 'rgba(214,222,240,0)');
+    const rgWide = ctx.createLinearGradient(rimX0, 0, rimX1, 0);
+    rgWide.addColorStop(0, 'rgba(214,222,240,0.14)');
+    rgWide.addColorStop(0.7, 'rgba(214,222,240,0.12)');
+    rgWide.addColorStop(1, 'rgba(214,222,240,0)');
     ctx.save();
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(214,222,240,0.55)'; ctx.lineWidth = 1.4; ctx.stroke(rim);
-    ctx.strokeStyle = 'rgba(214,222,240,0.14)'; ctx.lineWidth = 4.5; ctx.stroke(rim);
+    ctx.strokeStyle = rgThin; ctx.lineWidth = 1.4; ctx.stroke(rim);
+    ctx.strokeStyle = rgWide; ctx.lineWidth = 4.5; ctx.stroke(rim);
     ctx.restore();
   }
 
