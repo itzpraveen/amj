@@ -237,8 +237,20 @@
 </section>
 
 <!-- ===================== COVERAGE / CLIENTS ===================== -->
-<section class="sect cover" id="coverage" data-screen-label="Coverage">
-  <div class="wrap cover-grid">
+<section class="sect cover cover-stage" id="coverage" data-screen-label="Coverage">
+  <div class="cover-bg" aria-hidden="true">
+    <div class="netmap">
+      <canvas class="netmap-canvas"></canvas>
+      <div class="map-orbit" aria-hidden="true">
+        <span class="orbit-ring r1"></span>
+        <span class="orbit-ring r2"></span>
+      </div>
+      <div class="nodes"></div>
+      <div class="netmap-legend"><span class="lg-dot"></span> Live distribution · on-time, every time</div>
+    </div>
+    <div class="cover-scrim"></div>
+  </div>
+  <div class="wrap cover-inner">
     <div class="reveal">
       <span class="kicker">Our Clients</span>
       <h2 class="h2" style="margin-top:20px;">Reliability you<br>can <em class="it">depend on</em>.</h2>
@@ -267,21 +279,6 @@
         <span>Wholesale</span>
         <span>Food service</span>
         <span>Institutions</span>
-      </div>
-    </div>
-    <div class="reveal" data-d="1">
-      <div class="netmap" data-tilt="4">
-        <canvas class="netmap-canvas"></canvas>
-        <div class="map-orbit" aria-hidden="true">
-          <span class="orbit-ring r1"></span>
-          <span class="orbit-ring r2"></span>
-          <span class="orbit-card oc1">Retail</span>
-          <span class="orbit-card oc2">HORECA</span>
-          <span class="orbit-card oc3">Cold chain</span>
-        </div>
-        <div class="nodes"></div>
-        <div class="netmap-legend"><span class="lg-dot"></span> Live distribution · on-time, every time</div>
-        <span class="ph-badge">Coverage network · Qatar</span>
       </div>
     </div>
   </div>
