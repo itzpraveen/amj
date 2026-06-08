@@ -82,10 +82,18 @@
 
   // wind-blown sand off the crest
   let spray = [];
+  // live twinkling stars + an occasional shooting star
+  let twinkle = [];
+  let shoot = null, nextShoot = 5 + Math.random() * 6;
   function seedSpray() {
     const r = rng(5); spray = [];
     const N = finePointer ? 60 : 34;
     for (let i = 0; i < N; i++) spray.push(resetGrainP(r, r() * 1));
+  }
+  function seedTwinkle() {
+    const r = rng(77); twinkle = [];
+    const N = finePointer ? 26 : 16;
+    for (let i = 0; i < N; i++) twinkle.push({ x: r(), y: r() * 0.5, s: r() * 1.1 + 0.5, ph: r() * 6.2832, sp: 0.5 + r() * 1.3 });
   }
   function resetGrainP(r, life0) {
     const i = Math.floor((r ? r() : Math.random()) * (CREST.length - 4));
@@ -145,6 +153,8 @@
       skyCtx.beginPath(); skyCtx.arc(x, y, rad, 0, 6.2832); skyCtx.fill();
     }
 
+    drawMoon(skyCtx);
+
     // distant mountains (faint, left + right)
     drawMountains(skyCtx, 0.0, 0.55, 17, 0.07, 'rgba(22,36,58,0.85)');
     drawMountains(skyCtx, 0.62, 1.05, 23, 0.06, 'rgba(20,33,54,0.8)');
@@ -160,6 +170,35 @@
     }
     p.lineTo(x1 * S.w, S.h); p.closePath();
     c.fillStyle = fill; c.fill(p);
+  }
+
+  // the moon — a luminous disc with a layered bloom, the scene's light source
+  function drawMoon(c) {
+    const mx = S.w * 0.40, my = S.h * 0.17, mr = Math.max(18, S.w * 0.020);
+    // wide atmospheric bloom
+    let g = c.createRadialGradient(mx, my, 0, mx, my, mr * 9);
+    g.addColorStop(0, 'rgba(172,196,232,0.20)');
+    g.addColorStop(0.3, 'rgba(150,176,214,0.08)');
+    g.addColorStop(1, 'rgba(150,176,214,0)');
+    c.fillStyle = g; c.fillRect(0, 0, S.w, S.h);
+    // tight halo
+    g = c.createRadialGradient(mx, my, mr * 0.6, mx, my, mr * 2.6);
+    g.addColorStop(0, 'rgba(226,233,246,0.5)');
+    g.addColorStop(1, 'rgba(226,233,246,0)');
+    c.fillStyle = g; c.fillRect(0, 0, S.w, S.h);
+    // disc with soft terminator shading
+    g = c.createRadialGradient(mx - mr * 0.35, my - mr * 0.35, mr * 0.1, mx, my, mr);
+    g.addColorStop(0, '#f4f7fc');
+    g.addColorStop(0.7, '#dee5f1');
+    g.addColorStop(1, '#bfcadf');
+    c.beginPath(); c.arc(mx, my, mr, 0, 6.2832); c.fillStyle = g; c.fill();
+    // faint maria so it reads as a real moon, not a dot
+    c.save(); c.beginPath(); c.arc(mx, my, mr, 0, 6.2832); c.clip();
+    c.fillStyle = 'rgba(150,166,196,0.12)';
+    c.beginPath(); c.arc(mx + mr * 0.28, my - mr * 0.12, mr * 0.30, 0, 6.2832); c.fill();
+    c.beginPath(); c.arc(mx - mr * 0.32, my + mr * 0.26, mr * 0.22, 0, 6.2832); c.fill();
+    c.beginPath(); c.arc(mx + mr * 0.02, my + mr * 0.38, mr * 0.16, 0, 6.2832); c.fill();
+    c.restore();
   }
 
   function bakeGrain() {
@@ -251,6 +290,47 @@
     ctx.restore();
   }
 
+  function drawTwinkle() {
+    const ox = -S.px * 12, oy = -S.py * 7;
+    for (const t of twinkle) {
+      const a = 0.22 + 0.5 * (0.5 + 0.5 * Math.sin(S.t * t.sp + t.ph));
+      ctx.fillStyle = `rgba(220,232,250,${a.toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(t.x * S.w + ox, t.y * S.h + oy, t.s, 0, 6.2832); ctx.fill();
+    }
+  }
+
+  function drawShoot(dt) {
+    if (!shoot) {
+      if (dt > 0 && S.t >= nextShoot) {
+        const r = Math.random;
+        shoot = { x: 0.12 + r() * 0.5, y: 0.06 + r() * 0.20, ang: 0.36 + r() * 0.26, vlen: 0.55 + r() * 0.30, len: 0.15 + r() * 0.10, t: 0, dur: 0.85 };
+      }
+      return;
+    }
+    shoot.t += dt;
+    const k = shoot.t / shoot.dur;
+    if (k >= 1) { shoot = null; nextShoot = S.t + 13 + Math.random() * 13; return; }
+    const dist = shoot.vlen * k;
+    const hx = (shoot.x + Math.cos(shoot.ang) * dist) * S.w;
+    const hy = (shoot.y + Math.sin(shoot.ang) * dist) * S.h;
+    const tailK = Math.min(1, k * 3) * (1 - Math.max(0, (k - 0.65) / 0.35));
+    const tlen = shoot.len * S.w * tailK;
+    const tx = hx - Math.cos(shoot.ang) * tlen, ty = hy - Math.sin(shoot.ang) * tlen;
+    const fade = Math.sin(Math.min(k, 1) * Math.PI);
+    ctx.save();
+    ctx.lineCap = 'round';
+    const g = ctx.createLinearGradient(hx, hy, tx, ty);
+    g.addColorStop(0, `rgba(234,242,255,${(0.9 * fade).toFixed(3)})`);
+    g.addColorStop(1, 'rgba(234,242,255,0)');
+    ctx.strokeStyle = g; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(tx, ty); ctx.stroke();
+    const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 5);
+    hg.addColorStop(0, `rgba(240,246,255,${(0.95 * fade).toFixed(3)})`);
+    hg.addColorStop(1, 'rgba(240,246,255,0)');
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy, 5, 0, 6.2832); ctx.fill();
+    ctx.restore();
+  }
+
   function drawVignette() {
     const g = ctx.createRadialGradient(S.w * 0.5, S.h * 0.44, S.h * 0.2, S.w * 0.5, S.h * 0.58, S.w * 0.8);
     g.addColorStop(0, 'rgba(0,0,0,0)');
@@ -263,6 +343,8 @@
     ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
     ctx.drawImage(sky, -S.px * 12, -S.py * 7, S.w + 24, S.h + 14);
+    drawTwinkle();
+    drawShoot(dt);
     drawDune();
     drawSpray(dt);
     // soft elliptical scrim behind the centred hero text for legibility
@@ -290,7 +372,7 @@
     S.dpr = Math.min(window.devicePixelRatio || 1, S.w < 760 ? 1.3 : 1.5);
     canvas.width = Math.round(S.w * S.dpr); canvas.height = Math.round(S.h * S.dpr);
     setGeo();
-    bakeSky(); bakeGrain(); seedSpray(); render(0);
+    bakeSky(); bakeGrain(); seedSpray(); seedTwinkle(); render(0);
   }
 
   window.addEventListener('pointermove', (e) => {

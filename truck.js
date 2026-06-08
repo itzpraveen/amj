@@ -45,7 +45,7 @@
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
     // smaller truck on phones so it doesn't dominate the narrow screen
-    const tw = mobile ? 52 : 84, th = tw / 2;
+    const tw = mobile ? 60 : 96, th = tw / 2;
     truck.setAttribute('x', -tw / 2);
     truck.setAttribute('y', -th / 2);
     truck.setAttribute('width', tw);
