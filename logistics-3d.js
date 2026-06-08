@@ -172,33 +172,40 @@
     c.fillStyle = fill; c.fill(p);
   }
 
-  // the moon — a luminous disc with a layered bloom, the scene's light source
+  // the moon — a slim crescent (a nod to the region), with a soft glow
+  // along the lit edge. Built on an offscreen buffer so the carved dark
+  // limb stays transparent and the sky shows through.
   function drawMoon(c) {
-    const mx = S.w * 0.40, my = S.h * 0.17, mr = Math.max(18, S.w * 0.020);
-    // wide atmospheric bloom
-    let g = c.createRadialGradient(mx, my, 0, mx, my, mr * 9);
-    g.addColorStop(0, 'rgba(172,196,232,0.20)');
-    g.addColorStop(0.3, 'rgba(150,176,214,0.08)');
+    const mx = S.w * 0.40, my = S.h * 0.17, mr = Math.max(20, S.w * 0.023);
+    // wide atmospheric bloom on the sky
+    const g = c.createRadialGradient(mx, my, 0, mx, my, mr * 8);
+    g.addColorStop(0, 'rgba(172,196,232,0.15)');
+    g.addColorStop(0.32, 'rgba(150,176,214,0.06)');
     g.addColorStop(1, 'rgba(150,176,214,0)');
     c.fillStyle = g; c.fillRect(0, 0, S.w, S.h);
-    // tight halo
-    g = c.createRadialGradient(mx, my, mr * 0.6, mx, my, mr * 2.6);
-    g.addColorStop(0, 'rgba(226,233,246,0.5)');
-    g.addColorStop(1, 'rgba(226,233,246,0)');
-    c.fillStyle = g; c.fillRect(0, 0, S.w, S.h);
-    // disc with soft terminator shading
-    g = c.createRadialGradient(mx - mr * 0.35, my - mr * 0.35, mr * 0.1, mx, my, mr);
-    g.addColorStop(0, '#f4f7fc');
-    g.addColorStop(0.7, '#dee5f1');
-    g.addColorStop(1, '#bfcadf');
-    c.beginPath(); c.arc(mx, my, mr, 0, 6.2832); c.fillStyle = g; c.fill();
-    // faint maria so it reads as a real moon, not a dot
-    c.save(); c.beginPath(); c.arc(mx, my, mr, 0, 6.2832); c.clip();
-    c.fillStyle = 'rgba(150,166,196,0.12)';
-    c.beginPath(); c.arc(mx + mr * 0.28, my - mr * 0.12, mr * 0.30, 0, 6.2832); c.fill();
-    c.beginPath(); c.arc(mx - mr * 0.32, my + mr * 0.26, mr * 0.22, 0, 6.2832); c.fill();
-    c.beginPath(); c.arc(mx + mr * 0.02, my + mr * 0.38, mr * 0.16, 0, 6.2832); c.fill();
-    c.restore();
+
+    const pad = Math.ceil(mr * 3);
+    const mc = document.createElement('canvas');
+    mc.width = mc.height = pad * 2;
+    const m = mc.getContext('2d');
+    const cx = pad, cy = pad;
+    // halo (carved away on the dark side -> glow only on the lit crescent)
+    let h = m.createRadialGradient(cx, cy, mr * 0.7, cx, cy, mr * 2.3);
+    h.addColorStop(0, 'rgba(226,233,246,0.5)');
+    h.addColorStop(1, 'rgba(226,233,246,0)');
+    m.fillStyle = h; m.fillRect(0, 0, mc.width, mc.height);
+    // bright disc, highlight toward the thick (lit) side
+    let d = m.createRadialGradient(cx - mr * 0.4, cy + mr * 0.25, mr * 0.1, cx, cy, mr);
+    d.addColorStop(0, '#f6f8fd');
+    d.addColorStop(0.7, '#e2e8f3');
+    d.addColorStop(1, '#c6d0e2');
+    m.beginPath(); m.arc(cx, cy, mr, 0, 6.2832); m.fillStyle = d; m.fill();
+    // carve the shadow to leave a tilted crescent
+    m.globalCompositeOperation = 'destination-out';
+    m.beginPath(); m.arc(cx + mr * 0.52, cy - mr * 0.30, mr * 1.04, 0, 6.2832); m.fill();
+    m.globalCompositeOperation = 'source-over';
+
+    c.drawImage(mc, mx - pad, my - pad);
   }
 
   function bakeGrain() {
