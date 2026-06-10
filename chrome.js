@@ -19,7 +19,8 @@
         <a href="restaurants.html" role="menuitem"${isA('restaurants')}>F&amp;B Brands<small>Dining &amp; restaurant concepts</small></a>
       </div>
     </div>
-    <a href="news.html"${isA('news')}>Media</a>`;
+    <a href="news.html"${isA('news')}>Media</a>
+    <a href="locate.html"${isA('locate')}>Locate Us</a>`;
 
   const mmLinks = `
     <a href="history.html"><span class="mm-no">01</span>Legacy</a>
@@ -27,7 +28,8 @@
     <span class="mm-group">Division</span>
     <a href="brands.html"><span class="mm-no">03</span>FMCG Brands</a>
     <a href="restaurants.html"><span class="mm-no">04</span>F&amp;B Brands</a>
-    <a href="news.html"><span class="mm-no">05</span>Media</a>`;
+    <a href="news.html"><span class="mm-no">05</span>Media</a>
+    <a href="locate.html"><span class="mm-no">06</span>Locate Us</a>`;
 
   const navHTML = `
   <header class="nav nav--inner">
@@ -71,7 +73,7 @@
           <ul>
             <li><a href="news.html">Media</a></li>
             <li><a href="locate.html">Locate us</a></li>
-            <li><a href="contact.html">Careers</a></li>
+            <li><a href="contact.html?topic=careers">Careers</a></li>
             <li><a href="contact.html">Connect</a></li>
           </ul>
         </div>
@@ -100,8 +102,50 @@
     const footMount = document.getElementById('amj-foot');
     if (navMount) navMount.outerHTML = navHTML;
     if (footMount) footMount.outerHTML = footHTML;
+    injectBreadcrumbSchema();
     const yr = document.getElementById('year');
     if (yr) yr.textContent = new Date().getFullYear();
+  }
+
+  function injectBreadcrumbSchema() {
+    const path = window.location.pathname.split('/').pop() || 'index.html';
+    const labels = {
+      'history.html': 'Legacy',
+      'infrastructure.html': 'Excellence',
+      'brands.html': 'FMCG Brands',
+      'restaurants.html': 'F&B Brands',
+      'news.html': 'Media',
+      'contact.html': 'Connect',
+      'locate.html': 'Locate Us',
+      'news-national-sports-day-2026.html': 'National Sports Day 2026',
+      'news-outback-porto-arabia.html': 'Outback Porto Arabia Opening',
+      'news-frozen-storage-capacity.html': 'Frozen Storage Capacity',
+      'news-portfolio-expansion.html': 'Portfolio Expansion'
+    };
+    const label = labels[path];
+    if (!label || document.querySelector('script[data-amj-breadcrumb]')) return;
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.dataset.amjBreadcrumb = 'true';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://amjqatar.me/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: label,
+          item: `https://amjqatar.me/${path}`
+        }
+      ]
+    });
+    document.head.appendChild(script);
   }
 
   // Build synchronously: this script is placed at the end of <body>,

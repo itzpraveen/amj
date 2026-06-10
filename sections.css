@@ -539,8 +539,8 @@
 .foot-social a:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: translateY(-3px); }
 
 /* giant footer wordmark — subtle watermark, generous breathing room */
-.foot-mark { text-align: center; margin-top: clamp(52px, 8vw, 120px); line-height: 0; user-select: none; overflow: hidden; }
-.foot-mark img { display: block; margin: 0 auto; width: clamp(200px, 42vw, 600px); height: auto; opacity: 0.10; }
+.foot-mark { text-align: center; margin-top: clamp(28px, 4vw, 56px); padding-bottom: clamp(28px, 4vw, 56px); line-height: 0; user-select: none; overflow: hidden; }
+.foot-mark img { display: block; margin: 0 auto; width: clamp(120px, 16vw, 240px); height: auto; opacity: 0.10; }
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 980px) {

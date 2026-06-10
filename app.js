@@ -25,7 +25,7 @@
     entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+  }, { threshold: 0.06, rootMargin: '0px 0px -2% 0px' });
   document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
   /* Safety net: ensure anything in/above the viewport is shown even if
@@ -128,5 +128,15 @@
     burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
     menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+  }
+
+  /* ---- Contact: preselect enquiry type from ?topic= ---- */
+  const topicSel = document.querySelector('select[name="topic"]');
+  const topicQ = new URLSearchParams(location.search).get('topic');
+  if (topicSel && topicQ) {
+    const want = topicQ.toLowerCase();
+    for (const opt of topicSel.options) {
+      if (opt.text.toLowerCase().includes(want)) { topicSel.value = opt.value; break; }
+    }
   }
 })();

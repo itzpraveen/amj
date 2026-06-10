@@ -37,6 +37,11 @@
     const ctx = cvs.getContext('2d');
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let W, H, parts;
+    // gentle horizontal drift following the cursor
+    let cx = 0, cxT = 0;
+    window.addEventListener('pointermove', (e) => {
+      cxT = e.clientX / Math.max(window.innerWidth, 1) - 0.5;
+    }, { passive: true });
     function init() {
       const n = Math.max(10, Math.round((W * H) / (150000 * dpr)));
       parts = [];
@@ -58,6 +63,7 @@
     }
     function frame() {
       ctx.clearRect(0, 0, W, H);
+      cx += (cxT - cx) * 0.04;
       for (const p of parts) {
         if (motionOn()) { p.x += p.vx + cx * 0.35 * dpr; p.y += p.vy; p.r += p.vr; }
         if (p.y < -30) { p.y = H + 30; p.x = Math.random() * W; }

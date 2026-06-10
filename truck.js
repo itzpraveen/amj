@@ -31,13 +31,15 @@
   let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0, lastProg = 0, dir = 1;
 
   function build() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    // phones/tablets have no gutter for the truck to drive in — skip entirely
+    if (W < 1024) { on = false; track.style.display = 'none'; return; }
     on = true;
     track.style.display = 'block';
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
-    W = window.innerWidth;
-    H = window.innerHeight;
-    const mobile = W < 1024;
+    const mobile = false;
     const hero = document.querySelector('.hero');
     heroH = hero ? hero.offsetHeight : H;
     svg.setAttribute('width', W);
@@ -84,7 +86,14 @@
     truck.style.transform = `rotate(${ang.toFixed(1)}deg)`;
     // never on the hero — fade in once the hero has (mostly) scrolled away
     const op = Math.min(1, Math.max(0, (window.scrollY - heroH * 0.7) / (heroH * 0.3)));
-    truck.style.opacity = op.toFixed(2);
+    // drive "under" the page: fade out while crossing the content column so
+    // the truck never sits on top of text, re-emerging in the side gutters
+    const gut = Math.min(Math.max(W * 0.05, 20), 64);
+    const colL = Math.max((W - 1320) / 2, 0) + gut;
+    const colR = W - colL;
+    const out = Math.max(colL - p.x, p.x - colR, 0);
+    const colFade = Math.min(1, out / 70);
+    truck.style.opacity = (op * colFade).toFixed(2);
   }
 
   function onScroll() {
