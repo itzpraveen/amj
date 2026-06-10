@@ -128,6 +128,15 @@
     burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
     menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+
+    menu.querySelectorAll('.mm-dd').forEach((dd) => {
+      const toggle = dd.querySelector('.mm-dd-toggle');
+      if (!toggle) return;
+      toggle.addEventListener('click', () => {
+        const open = dd.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    });
   }
 
   /* ---- Contact: preselect enquiry type from ?topic= ---- */

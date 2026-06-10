@@ -23,13 +23,19 @@
     <a href="locate.html"${isA('locate')}>Locate Us</a>`;
 
   const mmLinks = `
-    <a href="history.html"><span class="mm-no">01</span>Legacy</a>
-    <a href="infrastructure.html"><span class="mm-no">02</span>Excellence</a>
-    <span class="mm-group">Division</span>
-    <a href="brands.html"><span class="mm-no">03</span>FMCG Brands</a>
-    <a href="restaurants.html"><span class="mm-no">04</span>F&amp;B Brands</a>
-    <a href="news.html"><span class="mm-no">05</span>Media</a>
-    <a href="locate.html"><span class="mm-no">06</span>Locate Us</a>`;
+    <a href="history.html"${isA('history')}>Legacy</a>
+    <a href="infrastructure.html"${isA('infrastructure')}>Excellence</a>
+    <div class="mm-dd${ddActive}${ddActive ? ' is-open' : ''}">
+      <button type="button" class="mm-dd-toggle" aria-expanded="${ddActive ? 'true' : 'false'}">Division <span class="mm-dd-caret" aria-hidden="true">▾</span></button>
+      <div class="mm-dd-menu">
+        <div class="mm-dd-inner">
+          <a href="brands.html"${isA('brands')}>FMCG Brands<small>Distributed food &amp; beverage labels</small></a>
+          <a href="restaurants.html"${isA('restaurants')}>F&amp;B Brands<small>Dining &amp; restaurant concepts</small></a>
+        </div>
+      </div>
+    </div>
+    <a href="news.html"${isA('news')}>Media</a>
+    <a href="locate.html"${isA('locate')}>Locate Us</a>`;
 
   const navHTML = `
   <header class="nav nav--inner">
@@ -82,6 +88,8 @@
           <ul>
             <li><a href="mailto:info@amjqatar.me">info@amjqatar.me</a></li>
             <li><a href="https://www.linkedin.com/company/al-majid-jawad/" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://www.instagram.com/almajidjawadqatar/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="https://www.facebook.com/almajidjawadqatar" target="_blank" rel="noopener">Facebook</a></li>
             <li><a href="contact.html">Connect</a></li>
           </ul>
         </div>
@@ -90,11 +98,12 @@
         <p>© <span id="year">2026</span> Al Majid Jawad W.L.L. All rights reserved.</p>
         <div class="foot-social">
           <a href="https://www.linkedin.com/company/al-majid-jawad/" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          <a href="https://www.instagram.com/almajidjawadqatar/" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+          <a href="https://www.facebook.com/almajidjawadqatar" target="_blank" rel="noopener" aria-label="Facebook">f</a>
           <a href="mailto:info@amjqatar.me" aria-label="Email">@</a>
         </div>
       </div>
     </div>
-    <div class="foot-mark"><img src="assets/amj-logo-original.svg" alt="" aria-hidden="true" /></div>
   </footer>`;
 
   function build() {
