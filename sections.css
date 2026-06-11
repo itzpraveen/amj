@@ -531,11 +531,15 @@
 .foot ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .foot ul a { color: var(--ink-2); font-size: 15px; transition: color 0.35s var(--ease), padding-left 0.35s var(--ease); }
 .foot ul a:hover { color: var(--accent); padding-left: 6px; }
+.foot-group { margin-top: 2px; }
+.foot-group-label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+.foot-group ul { gap: 10px; padding-left: 12px; border-left: 1px solid var(--line-soft); }
 .foot .fbrand .foot-logo { display: block; height: 50px; width: auto; }
 .foot-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--line-soft); flex-wrap: wrap; gap: 16px; }
 .foot-bottom p { font-size: 13px; color: var(--ink-3); font-family: var(--mono); letter-spacing: 0.04em; }
 .foot-social { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-.foot-social a { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ink-2); font-family: var(--mono); font-size: 13px; font-weight: 600; line-height: 1; transition: all 0.4s var(--ease); }
+.foot-social a { width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ink-2); transition: all 0.4s var(--ease); }
+.foot-social a svg { width: 16px; height: 16px; fill: currentColor; display: block; }
 .foot-social a:hover { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); transform: translateY(-3px); }
 
 /* ---------- RESPONSIVE ---------- */
