@@ -55,6 +55,44 @@
 .leader-quote blockquote p:last-child { margin-bottom: 0; }
 .leader-quote .leader-role { margin: 0; padding-top: 20px; border-top: 1px solid var(--line-soft); }
 
+.leadership-profiles { gap: clamp(30px, 4vw, 52px); }
+.leader-profile {
+  grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1.28fr);
+  align-items: stretch;
+  padding: clamp(18px, 2.4vw, 28px);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--bg), var(--bg-2));
+}
+.leader-profile:nth-child(even) { grid-template-columns: minmax(0, 1.28fr) minmax(190px, 0.72fr); }
+.leader-profile .leader-portrait {
+  height: 100%;
+  min-height: 260px;
+  border-radius: 14px;
+  background: oklch(0.13 0.02 250);
+  box-shadow: var(--shadow);
+}
+.leader-profile .leader-msg {
+  align-self: center;
+  padding: clamp(10px, 2vw, 22px) clamp(4px, 1vw, 10px);
+}
+.leader-profile .leader-role {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1;
+}
+.leader-profile .leader-name { margin-bottom: 24px; }
+.leader-profile blockquote { margin: 0; }
+.leader-profile blockquote p {
+  font-family: var(--serif);
+  font-size: clamp(18px, 1.6vw, 23px);
+  line-height: 1.58;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+.leader-profile blockquote p:last-child { margin-bottom: 0; }
+
 /* ---------- Vision / Mission ---------- */
 .vm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); margin-top: 8px; }
 .vm-card { background: var(--bg); padding: clamp(34px, 4vw, 56px); position: relative; transition: background 0.5s var(--ease); }
@@ -144,6 +182,9 @@
   .leader, .leader:nth-child(even), .leaders-quotes, .split, .split.rev, .contact-grid { grid-template-columns: 1fr; }
   .leader:nth-child(even) .leader-portrait, .split.rev .split-media { order: 0; }
   .leader-portrait { max-width: 360px; }
+  .leader-profile { padding: 18px; }
+  .leader-profile .leader-portrait { width: min(100%, 300px); justify-self: center; min-height: 0; }
+  .leader-profile .leader-msg { padding: 8px 2px 4px; }
   .resto-card, .resto-card:nth-child(even) .resto-media { grid-template-columns: 1fr; }
   .resto-card:nth-child(even) .resto-media { order: 0; }
   .vm-grid { grid-template-columns: 1fr; }
