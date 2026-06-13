@@ -39,6 +39,28 @@ body.menu-open .nav-burger span { background: oklch(0.97 0.005 250) !important; 
   transition: clip-path 0.6s var(--ease); pointer-events: none;
 }
 body.menu-open .mobile-menu { clip-path: circle(150% at calc(100% - 44px) 44px); pointer-events: auto; }
+.mm-close {
+  position: absolute; top: clamp(18px, 5vw, 32px); right: clamp(20px, 6vw, 42px); z-index: 2;
+  min-height: 44px; display: inline-flex; align-items: center; gap: 10px;
+  padding: 0 15px; border: 1px solid oklch(0.97 0.005 250 / 0.24); border-radius: 999px;
+  color: oklch(0.97 0.005 250); font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  opacity: 0; transform: translateY(-8px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), background 0.3s, border-color 0.3s;
+}
+.mm-close:active {
+  background: oklch(0.97 0.005 250 / 0.1); border-color: oklch(0.97 0.005 250 / 0.38);
+}
+.mm-close-icon {
+  position: relative; width: 15px; height: 15px; flex: 0 0 15px;
+}
+.mm-close-icon::before,
+.mm-close-icon::after {
+  content: ""; position: absolute; top: 7px; left: 0; width: 15px; height: 2px;
+  background: currentColor; border-radius: 2px;
+}
+.mm-close-icon::before { transform: rotate(45deg); }
+.mm-close-icon::after { transform: rotate(-45deg); }
+body.menu-open .mm-close { opacity: 1; transform: none; transition-delay: 0.12s; }
 .mm-links { display: flex; flex-direction: column; gap: 8px; }
 .mm-links > a,
 .mm-dd-toggle {

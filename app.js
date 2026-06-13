@@ -120,12 +120,15 @@
   const burger = document.querySelector('.nav-burger');
   const menu = document.getElementById('mobile-menu');
   if (burger && menu) {
+    const closeBtns = menu.querySelectorAll('[data-menu-close]');
     const setMenu = (open) => {
       document.body.classList.toggle('menu-open', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       menu.setAttribute('aria-hidden', open ? 'false' : 'true');
     };
     burger.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
+    closeBtns.forEach((btn) => btn.addEventListener('click', () => setMenu(false)));
     menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 

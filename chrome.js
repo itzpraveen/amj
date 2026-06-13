@@ -52,6 +52,10 @@
     </div>
   </header>
   <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <button class="mm-close" type="button" data-menu-close aria-label="Close menu">
+      <span class="mm-close-icon" aria-hidden="true"></span>
+      <span>Close</span>
+    </button>
     <nav class="mm-links">${mmLinks}</nav>
     <a class="mm-cta" href="contact.html"><span class="pulse"></span>Connect</a>
     <div class="mm-foot">info@amjqatar.me · Doha, State of Qatar</div>

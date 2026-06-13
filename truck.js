@@ -2,7 +2,7 @@
    Scroll-linked delivery truck (top-down).
    Sweeps left <-> right in a smooth elliptical serpentine down the
    page, positioned by scroll progress: scroll down drives it down,
-   scroll up reverses it. Starts below the hero; desktop only.
+   scroll up reverses it. Starts below the hero.
    ============================================================ */
 (function () {
   const NS = 'http://www.w3.org/2000/svg';
@@ -33,13 +33,11 @@
   function build() {
     W = window.innerWidth;
     H = window.innerHeight;
-    // phones/tablets have no gutter for the truck to drive in — skip entirely
-    if (W < 1024) { on = false; track.style.display = 'none'; return; }
     on = true;
     track.style.display = 'block';
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
-    const mobile = false;
+    const mobile = W < 768;
     const hero = document.querySelector('.hero');
     heroH = hero ? hero.offsetHeight : H;
     svg.setAttribute('width', W);
