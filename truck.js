@@ -86,14 +86,7 @@
     truck.style.transform = `rotate(${ang.toFixed(1)}deg)`;
     // never on the hero — fade in once the hero has (mostly) scrolled away
     const op = Math.min(1, Math.max(0, (window.scrollY - heroH * 0.7) / (heroH * 0.3)));
-    // drive "under" the page: fade out while crossing the content column so
-    // the truck never sits on top of text, re-emerging in the side gutters
-    const gut = Math.min(Math.max(W * 0.05, 20), 64);
-    const colL = Math.max((W - 1320) / 2, 0) + gut;
-    const colR = W - colL;
-    const out = Math.max(colL - p.x, p.x - colR, 0);
-    const colFade = Math.min(1, out / 70);
-    truck.style.opacity = (op * colFade).toFixed(2);
+    truck.style.opacity = op.toFixed(2);
   }
 
   function onScroll() {
