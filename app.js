@@ -77,17 +77,37 @@
   /* ---- Marquee strip (duplicated, css-less JS loop for seamless) ---- */
   const track = document.querySelector('.strip .track');
   if (track) {
-    track.innerHTML += track.innerHTML; // duplicate
+    const original = track.innerHTML;
+    track.innerHTML = original + original;
+
     let x = 0;
-    function marq() {
-      if (motionOn()) {
-        x -= 0.4;
-        if (Math.abs(x) >= track.scrollWidth / 2) x = 0;
-        track.style.transform = `translateX(${x}px)`;
+    let loopWidth = 0;
+    let last = performance.now();
+
+    const measureLoop = () => {
+      const itemCount = track.children.length / 2;
+      const first = track.children[0];
+      const repeat = track.children[itemCount];
+      if (!first || !repeat) return;
+      loopWidth = repeat.getBoundingClientRect().left - first.getBoundingClientRect().left;
+      x = loopWidth ? x % loopWidth : 0;
+      track.style.transform = `translate3d(${-x}px, 0, 0)`;
+    };
+
+    measureLoop();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureLoop);
+    window.addEventListener('resize', measureLoop, { passive: true });
+
+    function marq(now) {
+      if (motionOn() && loopWidth > 0) {
+        const dt = Math.min(now - last, 64);
+        x = (x + dt * 0.035) % loopWidth;
+        track.style.transform = `translate3d(${-x}px, 0, 0)`;
       }
+      last = now;
       requestAnimationFrame(marq);
     }
-    marq();
+    requestAnimationFrame(marq);
   }
 
   /* ---- Restaurant hover thumbnail handled in fx.js ---- */

@@ -97,10 +97,16 @@
 
 /* heritage marquee strip under hero */
 .strip { border-block: 1px solid var(--line-soft); background: var(--bg-2); overflow: hidden; position: relative; z-index: 3; }
-.strip .track { display: flex; gap: 0; white-space: nowrap; will-change: transform; }
+.strip .track {
+  display: flex;
+  gap: clamp(28px, 2.8vw, 44px);
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+}
 .strip-item {
-  display: inline-flex; align-items: center; gap: 16px;
-  padding: 20px 38px; font-family: var(--serif); font-size: 22px; color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 14px; flex: 0 0 auto;
+  padding: 20px 0; font-family: var(--serif); font-size: 22px; color: var(--ink-2);
 }
 .strip-item .star { color: var(--accent); font-size: 13px; }
 
