@@ -50,7 +50,7 @@
     truck.setAttribute('width', tw);
     truck.setAttribute('height', th);
 
-    const rightInset = mobile ? 38 : 58;
+    const rightInset = mobile ? 24 : 58;
     const x = W - rightInset;
     const yTop = mobile ? 90 : 112;
     const yBot = H - (mobile ? 78 : 92);
