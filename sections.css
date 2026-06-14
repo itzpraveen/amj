@@ -99,16 +99,23 @@
 .strip { border-block: 1px solid var(--line-soft); background: var(--bg-2); overflow: hidden; position: relative; z-index: 3; }
 .strip .track {
   display: flex;
-  gap: clamp(28px, 2.8vw, 44px);
+  gap: 0;
   width: max-content;
   white-space: nowrap;
   will-change: transform;
 }
 .strip-item {
-  display: inline-flex; align-items: center; gap: 14px; flex: 0 0 auto;
-  padding: 20px 0; font-family: var(--serif); font-size: 22px; color: var(--ink-2);
+  --strip-gap: clamp(24px, 2.8vw, 48px);
+  display: inline-flex; align-items: center; gap: var(--strip-gap); flex: 0 0 auto;
+  padding: 22px var(--strip-gap) 22px 0;
+  font-family: var(--serif); font-size: 22px; line-height: 1; color: var(--ink-2);
+  text-align: center;
 }
-.strip-item .star { color: var(--accent); font-size: 13px; }
+.strip-item .star {
+  color: var(--accent); font-size: 13px; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center;
+  transform: translateY(-0.02em);
+}
 
 /* ---------- ABOUT / PILLARS ---------- */
 .about-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(40px, 6vw, 96px); align-items: start; }
