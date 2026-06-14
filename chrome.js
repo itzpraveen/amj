@@ -58,7 +58,7 @@
     </button>
     <nav class="mm-links">${mmLinks}</nav>
     <a class="mm-cta" href="contact.html"><span class="pulse"></span>Connect</a>
-    <div class="mm-foot">info@amjqatar.me · Doha, State of Qatar</div>
+    <div class="mm-foot">C. Ring Road Doha, Qatar · +974 4435 6440</div>
   </div>`;
 
   const icons = {
@@ -103,9 +103,10 @@
           <h5>Contact</h5>
           <ul>
             <li><a href="mailto:info@amjqatar.me">info@amjqatar.me</a></li>
-            <li><a href="https://www.linkedin.com/company/al-majid-jawad/" target="_blank" rel="noopener">LinkedIn</a></li>
-            <li><a href="https://www.instagram.com/almajidjawadqatar/" target="_blank" rel="noopener">Instagram</a></li>
-            <li><a href="https://www.facebook.com/almajidjawadqatar" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="tel:+97444356440">+974 4435 6440</a></li>
+            <li>Fax: +974 4435 7350</li>
+            <li>C. Ring Road Doha - Qatar</li>
+            <li>P.O. Box: 19100</li>
             <li><a href="contact.html">Connect</a></li>
           </ul>
         </div>
