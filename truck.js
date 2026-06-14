@@ -27,7 +27,7 @@
   const truck = svg.querySelector('.truck');
   const truckPos = svg.querySelector('.truck-pos');
 
-  let W = 0, H = 0, len = 0, on = false, ticking = false, lastProg = 0, dir = 1;
+  let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0, lastProg = 0, dir = 1;
 
   function build() {
     W = window.innerWidth;
@@ -37,21 +37,23 @@
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
     const mobile = W < 768;
+    const hero = document.querySelector('.hero');
+    heroH = hero ? hero.offsetHeight : 0;
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-    // Keep the right-edge indicator compact so it stays clear of content.
-    const tw = mobile ? 52 : 78, th = tw / 2;
+    // Keep the right-edge indicator readable without covering the content column.
+    const tw = mobile ? 68 : 104, th = tw / 2;
     truck.setAttribute('x', -tw / 2);
     truck.setAttribute('y', -th / 2);
     truck.setAttribute('width', tw);
     truck.setAttribute('height', th);
 
-    const rightInset = mobile ? 30 : 44;
+    const rightInset = mobile ? 38 : 58;
     const x = W - rightInset;
-    const yTop = mobile ? 76 : 92;
-    const yBot = H - (mobile ? 58 : 70);
+    const yTop = mobile ? 90 : 112;
+    const yBot = H - (mobile ? 78 : 92);
     road.setAttribute('d', `M ${x.toFixed(1)} ${yTop.toFixed(1)} L ${x.toFixed(1)} ${yBot.toFixed(1)}`);
     len = road.getTotalLength();
     place();
@@ -60,7 +62,9 @@
   function place() {
     if (!on) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const prog = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+    const start = Math.min(heroH, max);
+    const span = max - start;
+    const prog = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - start) / span)) : 0;
     // flip the truck to face its travel direction, so reversing reads as driving back
     if (prog > lastProg + 0.0008) { dir = 1; lastProg = prog; }
     else if (prog < lastProg - 0.0008) { dir = -1; lastProg = prog; }
@@ -71,7 +75,8 @@
     const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + (dir < 0 ? 180 : 0);
     truckPos.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`);
     truck.style.transform = `rotate(${ang.toFixed(1)}deg)`;
-    truck.style.opacity = max > 0 ? '1' : '0';
+    const op = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - start) / 120)) : 0;
+    truck.style.opacity = op.toFixed(2);
   }
 
   function onScroll() {
