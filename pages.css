@@ -68,8 +68,9 @@
 }
 .leader-profile:nth-child(even) { grid-template-columns: minmax(0, 1.28fr) minmax(190px, 0.72fr); }
 .leader-profile .leader-portrait {
-  height: 100%;
-  min-height: 260px;
+  align-self: start;
+  height: auto;
+  min-height: 0;
   border-radius: 14px;
   border: 0;
   background: var(--bg-2);
@@ -90,6 +91,13 @@
   line-height: 1;
 }
 .leader-profile .leader-name { margin-bottom: 24px; }
+.leader-full-message { display: grid; gap: 12px; }
+.leader-full-message p {
+  color: var(--ink-2);
+  line-height: 1.72;
+  margin: 0;
+  font-size: clamp(15px, 1.15vw, 16.5px);
+}
 .leader-profile blockquote { margin: 0; }
 .leader-profile blockquote p {
   font-family: var(--serif);
