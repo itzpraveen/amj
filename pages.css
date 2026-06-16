@@ -142,11 +142,23 @@
 .resto-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
 .resto-card:hover .resto-media img { transform: scale(1.05); }
 .resto-media .ph-badge { z-index: 3; }
+.resto-media.logo-panel {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 24% 18%, oklch(0.98 0.012 250 / 0.9), transparent 34%),
+    linear-gradient(135deg, var(--bg), var(--bg-2));
+}
 .resto-media .resto-logo {
   position: absolute; inset: 0; margin: auto; z-index: 2;
   width: clamp(150px, 38%, 240px); height: auto; object-fit: contain;
   filter: drop-shadow(0 4px 18px oklch(0 0 0 / 0.35));
 }
+.resto-media.logo-panel .resto-logo { filter: none; transform-origin: center; }
+.resto-media.logo-panel .logo-wide { width: min(72%, 430px); }
+.resto-media.logo-panel .logo-tall { width: min(82%, 430px); max-width: none; }
+:root:not([data-theme="dark"]) .resto-media.logo-panel .logo-tall { mix-blend-mode: multiply; }
+.resto-card:hover .resto-media.logo-panel .resto-logo { transform: scale(1.03); }
 .resto-body { padding: clamp(30px, 4vw, 56px); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
 .resto-body .rk { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
 .resto-body h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 3.6vw, 48px); line-height: 1; }
