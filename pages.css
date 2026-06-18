@@ -136,7 +136,7 @@
 
 /* ---------- Restaurants detail ---------- */
 .resto-detail { display: flex; flex-direction: column; gap: clamp(28px, 4vw, 56px); margin-top: 56px; }
-.resto-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line-soft); border-radius: 14px; overflow: hidden; }
+.resto-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line-soft); border-radius: 14px; overflow: hidden; background: var(--bg); }
 .resto-card:nth-child(even) .resto-media { order: 2; }
 .resto-media { position: relative; aspect-ratio: 16/11; overflow: hidden; }
 .resto-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
@@ -145,24 +145,48 @@
 .resto-media.logo-panel {
   display: grid;
   place-items: center;
-  background:
-    radial-gradient(circle at 24% 18%, oklch(0.98 0.012 250 / 0.9), transparent 34%),
-    linear-gradient(135deg, var(--bg), var(--bg-2));
+  background: oklch(0.995 0.002 250);
+  box-shadow: inset 0 0 0 1px oklch(0.50 0.02 250 / 0.10);
+}
+.resto-media.logo-panel::after {
+  content: "";
+  position: absolute;
+  inset: auto 18% 25% 18%;
+  height: 18px;
+  background: radial-gradient(ellipse at center, oklch(0 0 0 / 0.10), transparent 68%);
+  opacity: 0;
+  transform: scaleX(0.7);
+  transition: opacity 0.34s var(--ease), transform 0.34s var(--ease);
+  z-index: 1;
 }
 .resto-media .resto-logo {
   position: absolute; inset: 0; margin: auto; z-index: 2;
   width: clamp(150px, 38%, 240px); height: auto; object-fit: contain;
   filter: drop-shadow(0 4px 18px oklch(0 0 0 / 0.35));
 }
-.resto-media.logo-panel .resto-logo { filter: none; transform-origin: center; }
+.resto-media.logo-panel .resto-logo {
+  filter: saturate(1);
+  transform-origin: center;
+  transition: transform 0.34s var(--ease), filter 0.34s var(--ease);
+}
 .resto-media.logo-panel .logo-wide { width: min(72%, 430px); }
 .resto-media.logo-panel .logo-tall { width: min(82%, 430px); max-width: none; }
 :root:not([data-theme="dark"]) .resto-media.logo-panel .logo-tall { mix-blend-mode: multiply; }
-.resto-card:hover .resto-media.logo-panel .resto-logo { transform: scale(1.03); }
+.resto-media.logo-panel .logo-knockout {
+  filter: brightness(0) saturate(1) invert(17%) sepia(22%) saturate(980%) hue-rotate(169deg) brightness(92%);
+}
+.resto-card:hover .resto-media.logo-panel::after { opacity: 1; transform: scaleX(1); }
+.resto-card:hover .resto-media.logo-panel .resto-logo {
+  transform: translateY(-5px) scale(1.045);
+  filter: saturate(1.06) drop-shadow(0 12px 18px oklch(0 0 0 / 0.12));
+}
+.resto-card:hover .resto-media.logo-panel .logo-knockout {
+  filter: brightness(0) saturate(1) invert(17%) sepia(22%) saturate(980%) hue-rotate(169deg) brightness(92%) drop-shadow(0 12px 18px oklch(0 0 0 / 0.12));
+}
 .resto-body { padding: clamp(30px, 4vw, 56px); display: flex; flex-direction: column; justify-content: center; gap: 16px; }
 .resto-body .rk { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
 .resto-body h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(30px, 3.6vw, 48px); line-height: 1; }
-.resto-body p { color: var(--ink-2); line-height: 1.7; }
+.resto-body p { color: var(--ink-2); line-height: 1.7; font-family: var(--sans); font-size: clamp(15px, 1.1vw, 16.5px); font-weight: 500; }
 .resto-stats { display: flex; gap: 28px; margin-top: 6px; flex-wrap: wrap; }
 .resto-stats .rs b { font-family: var(--serif); font-size: 24px; display: block; }
 .resto-stats .rs span { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
