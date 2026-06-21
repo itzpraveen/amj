@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: amj-qatar
+    runtime: static
+    repo: https://github.com/itzpraveen/amj
+    branch: main
+    staticPublishPath: .
+    autoDeploy: true
