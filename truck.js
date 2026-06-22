@@ -4,6 +4,8 @@
    page scroll progress, like a custom scroll indicator.
    ============================================================ */
 (function () {
+  if (document.querySelector('.truck-track')) return;
+
   const NS = 'http://www.w3.org/2000/svg';
 
   const track = document.createElement('div');
@@ -27,7 +29,7 @@
   const truck = svg.querySelector('.truck');
   const truckPos = svg.querySelector('.truck-pos');
 
-  let W = 0, H = 0, len = 0, on = false, ticking = false, heroH = 0, lastProg = 0, dir = 1;
+  let W = 0, H = 0, len = 0, on = false, ticking = false, heroStart = 0, lastProg = 0, dir = 1;
 
   function build() {
     W = window.innerWidth;
@@ -37,8 +39,11 @@
     if (!truck.getAttribute('href')) truck.setAttribute('href', 'assets/truck-art.svg');
 
     const mobile = W < 768;
-    const hero = document.querySelector('.hero');
-    heroH = hero ? hero.offsetHeight : 0;
+    const hero = document.querySelector('.hero, .page-hero');
+    const nav = document.querySelector('.nav');
+    const navOffset = Math.max(mobile ? 84 : 96, (nav ? nav.offsetHeight : 0) + 24);
+    const heroEnd = hero ? hero.getBoundingClientRect().top + window.scrollY + hero.offsetHeight : 0;
+    heroStart = Math.max(0, heroEnd - navOffset);
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -62,8 +67,9 @@
   function place() {
     if (!on) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const start = Math.min(heroH, max);
-    const span = max - start;
+    const start = Math.min(heroStart, max);
+    const span = Math.max(1, max - start);
+    const afterHero = window.scrollY >= Math.max(0, start - 4);
     const prog = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - start) / span)) : 0;
     // flip the truck to face its travel direction, so reversing reads as driving back
     if (prog > lastProg + 0.0008) { dir = 1; lastProg = prog; }
@@ -75,8 +81,7 @@
     const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + (dir < 0 ? 180 : 0);
     truckPos.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`);
     truck.style.transform = `rotate(${ang.toFixed(1)}deg)`;
-    const op = span > 0 ? Math.min(1, Math.max(0, (window.scrollY - start) / 120)) : 0;
-    truck.style.opacity = op.toFixed(2);
+    truck.style.opacity = afterHero ? '1' : '0';
   }
 
   function onScroll() {

@@ -129,8 +129,17 @@
     if (navMount) navMount.outerHTML = navHTML;
     if (footMount) footMount.outerHTML = footHTML;
     injectBreadcrumbSchema();
+    loadTruck();
     const yr = document.getElementById('year');
     if (yr) yr.textContent = new Date().getFullYear();
+  }
+
+  function loadTruck() {
+    if (document.querySelector('.truck-track') || document.querySelector('script[data-amj-truck]')) return;
+    const script = document.createElement('script');
+    script.src = 'truck.js';
+    script.dataset.amjTruck = 'true';
+    document.body.appendChild(script);
   }
 
   function injectBreadcrumbSchema() {
