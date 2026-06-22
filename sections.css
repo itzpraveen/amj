@@ -132,10 +132,6 @@
   transform: translateY(-2px);
   box-shadow: 0 22px 44px oklch(0.16 0.04 250 / 0.18);
 }
-.pillar .pn {
-  font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.1em;
-  transition: color 0.4s var(--ease), opacity 0.4s var(--ease);
-}
 .pillar h4 {
   font-family: var(--serif); font-weight: 500; font-size: 23px; margin: 20px 0 12px; line-height: 1.1;
   transition: color 0.4s var(--ease);
@@ -144,7 +140,6 @@
   color: var(--ink-3); font-size: 15px; line-height: 1.6;
   transition: color 0.4s var(--ease);
 }
-.pillar:hover .pn { color: oklch(0.90 0.035 244); opacity: 0.92; }
 .pillar:hover h4 { color: var(--accent-ink); }
 .pillar:hover p { color: oklch(0.96 0.006 250 / 0.82); }
 .pillar .pbar { position: absolute; left: 0; top: 0; width: 2px; height: 0; background: var(--accent); transition: height 0.6s var(--ease); }
