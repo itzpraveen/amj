@@ -14,6 +14,7 @@
 }
 .page-hero .ph-bg { position: absolute; inset: 0; z-index: 0; }
 .page-hero .ph-bg img { width: 100%; height: 100%; object-fit: cover; }
+.qatar-fifa-hero .ph-bg img { object-position: 50% 24%; }
 .page-hero .ph-bg::after {
   content: ""; position: absolute; inset: 0;
   background:
@@ -133,6 +134,18 @@
 .split-media .ph-badge { z-index: 3; }
 .news-banner-media { aspect-ratio: 16 / 9; background: oklch(0.91 0.014 250); }
 .news-banner-media img { object-fit: cover; object-position: center; }
+.news-portrait-media {
+  aspect-ratio: 3 / 4;
+  width: min(100%, 460px);
+  justify-self: center;
+}
+.news-portrait-media img {
+  box-sizing: border-box;
+  object-fit: contain;
+  object-position: center;
+  padding: clamp(12px, 2vw, 22px);
+  background: oklch(0.96 0.008 250);
+}
 .img-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .img-duo .split-media { aspect-ratio: 3/4; }
 
@@ -222,6 +235,7 @@
 .nl-item:hover { background: var(--bg-2); }
 .nl-thumb { aspect-ratio: 16/10; border-radius: 8px; overflow: hidden; position: relative; }
 .nl-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease); }
+.nl-thumb img.news-focus-top { object-position: 50% 24%; }
 .nl-item:hover .nl-thumb img { transform: scale(1.06); }
 .nl-body h3 { font-family: var(--serif); font-weight: 500; font-size: clamp(20px, 2.2vw, 27px); line-height: 1.15; margin-bottom: 10px; transition: color 0.3s; }
 .nl-item:hover .nl-body h3 { color: var(--accent); }
