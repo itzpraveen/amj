@@ -168,7 +168,9 @@
   if (topicSel && topicQ) {
     const want = topicQ.toLowerCase();
     for (const opt of topicSel.options) {
-      if (opt.text.toLowerCase().includes(want)) { topicSel.value = opt.value; break; }
+      const label = opt.text.toLowerCase();
+      const value = opt.value.toLowerCase();
+      if (label.includes(want) || value.includes(want)) { topicSel.value = opt.value; break; }
     }
   }
 })();

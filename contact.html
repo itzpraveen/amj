@@ -47,7 +47,18 @@
         <div class="field"><label>Company name</label><input type="text" name="company" placeholder="Your company" /></div>
         <div class="field"><label>Email address</label><input type="email" name="email" placeholder="your@email.com" required /></div>
         <div class="field"><label>Phone number</label><input type="tel" name="phone" placeholder="+974" /></div>
-        <div class="field"><label>Enquiry type</label><select name="topic"><option>Becoming a principal or brand partner</option><option>Wholesale and retail supply</option><option>Restaurant franchising</option><option>Careers</option><option>Something else</option></select></div>
+        <div class="field"><label>Enquiry type</label><select name="topic">
+          <option value="brand-distribution-partnership">Brand Distribution Partnership in Qatar</option>
+          <option value="retail-restaurant-franchise-partnership">Retail / Restaurant Franchise Partnership in Qatar</option>
+          <option value="wholesale-supply">Wholesale Supply Enquiry</option>
+          <option value="retail-supply">Retail Supply Enquiry</option>
+          <option value="product-availability">Product Availability</option>
+          <option value="product-locator">Product Locator / Where to Buy</option>
+          <option value="careers">Career Opportunities</option>
+          <option value="internship">Internship Opportunities</option>
+          <option value="marketing-collaboration">Marketing &amp; Collaboration Enquiries</option>
+          <option value="other">Other Enquiries</option>
+        </select></div>
         <div class="field"><label>Message</label><textarea name="message" placeholder="Tell us a little about your enquiry…"></textarea></div>
         <button type="submit" class="btn btn-primary" data-magnetic="0.25">Send message <span class="arr">→</span></button>
       </form>
