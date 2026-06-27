@@ -32,6 +32,63 @@
 .page-hero h1 em.it { color: oklch(0.84 0.045 75); text-shadow: 0 2px 22px oklch(0 0 0 / 0.45); }
 .page-hero .lede { color: oklch(0.92 0.012 250 / 0.9); margin-top: 24px; }
 
+/* Refined inner-page type scale for content-heavy brand pages. */
+body:is([data-page="history"], [data-page="infrastructure"], [data-page="brands"], [data-page="restaurants"], [data-page="locate"]) .page-hero .display {
+  font-size: clamp(34px, 5.2vw, 72px);
+}
+body:is([data-page="history"], [data-page="infrastructure"], [data-page="brands"], [data-page="restaurants"], [data-page="locate"]) .page-hero .lede {
+  font-size: clamp(16px, 1.15vw, 18px);
+  line-height: 1.58;
+  max-width: 54ch;
+}
+body:is([data-page="history"], [data-page="infrastructure"], [data-page="brands"], [data-page="restaurants"], [data-page="locate"]) .h2 {
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1.06;
+}
+body:is([data-page="history"], [data-page="infrastructure"], [data-page="brands"], [data-page="restaurants"], [data-page="locate"]) .sect-head .lede,
+body:is([data-page="brands"], [data-page="restaurants"], [data-page="locate"]) .sect > .wrap > .lede {
+  font-size: clamp(15px, 1.05vw, 17px);
+  line-height: 1.62;
+}
+body:is([data-page="history"], [data-page="infrastructure"]) .body-col p {
+  font-size: clamp(15px, 1vw, 16px);
+  line-height: 1.66;
+}
+body[data-page="history"] .lead-quote {
+  font-size: clamp(22px, 2.7vw, 34px);
+  line-height: 1.28;
+}
+body[data-page="history"] .vm-card h3 {
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.12;
+}
+body[data-page="history"] .vm-card p {
+  font-size: clamp(15px, 1vw, 16px);
+  line-height: 1.64;
+}
+body[data-page="infrastructure"] .pillar h4 {
+  font-size: clamp(20px, 2vw, 22px);
+}
+body[data-page="infrastructure"] .pillar p {
+  font-size: 14.5px;
+  line-height: 1.58;
+}
+body[data-page="restaurants"] .resto-body h3 {
+  font-size: clamp(25px, 2.8vw, 36px);
+  line-height: 1.04;
+}
+body[data-page="restaurants"] .resto-body p {
+  font-size: clamp(14.5px, 1vw, 15.5px);
+  line-height: 1.62;
+}
+body[data-page="locate"] .loc-card h4 {
+  font-size: 20px;
+}
+body[data-page="locate"] .loc-card p {
+  font-size: 14.5px;
+  line-height: 1.58;
+}
+
 /* ---------- Generic content section helpers ---------- */
 .lead-quote { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 46px); line-height: 1.22; letter-spacing: -0.01em; text-wrap: balance; }
 .body-col { max-width: 62ch; }
